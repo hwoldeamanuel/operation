@@ -14,7 +14,7 @@ import json
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.models import User
+from core.models import User
 from django.shortcuts import render, redirect
 
 import json
