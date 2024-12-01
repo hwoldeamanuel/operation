@@ -10,11 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
 
+environ.Env.read_env()
 
 
 # Quick-start development settings - unsuitable for production
@@ -91,17 +94,22 @@ WSGI_APPLICATION = 'operation.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+conn_str = env('AZURE_POSTGRESQL_CONNECTIONSTRING')
+conn_str_params = {pair.split('=')[0]: pair.split('=')[1] for pair in conn_str.split(' ')}
+
+
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'operation',
-            'USER': 'postgres',
-            'PASSWORD': 'Letmein@2023_1',
-            'HOST': 'localhost',
-            'PORT': '5432',
-            'DISABLE_SERVER_SIDE_CURSORS': True, 
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': conn_str_params['dbname'],
+        'HOST': conn_str_params['host'],
+        'USER': conn_str_params['user'],
+        'PASSWORD': conn_str_params['password'],
+        'PORT': '5432',
+        'sslmode': 'require',
     }
+}
+
 
 
 # Password validation
