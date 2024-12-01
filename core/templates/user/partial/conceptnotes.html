@@ -1,0 +1,47 @@
+
+
+<table class="table table-sm table-striped projects">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Program</th>
+        <th>Type</th>
+  <th>Title</th>
+        <th>Role </th>
+       
+       <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if conceptnotes %}   
+     {% for cn in conceptnotes %}
+     <tr>
+       <td>{{ forloop.counter}}</td>
+       <td>{% if cn.types == 'Activity' or cn.types == 'IcnReport' %}{{cn.icn.program}}{% elif cn.types == "ActivityReport" %}{{cn.activity.icn.program}}{%else %}{{cn.program}}{% endif %}
+       
+       </td>
+       <td>{% if cn.types == 'Icn' %}Intervention{% elif cn.types == 'IcnReport' %}Int. Report{% else %}{{cn.types}}{%endif%}</td>
+       <td>{% if cn.types == 'Icn' %} <a href="{% url 'icn_detail' cn.id %}">{{ cn.title }}{% elif cn.types == "IcnReport" %}<a href="{% url 'icnreport_detail' cn.icn_id %}">{{cn.icn.title}} {% elif cn.types == "Activity" %}<a href="{% url 'activity_detail' cn.id %}">{{cn.title}} {% elif cn.types == "ActivityReport" %}<a href="{% url 'activityreport_detail' cn.activity_id %}">{{cn.activity.title}}{% endif %} </a></td>
+       <td> {% if cn.user == request.user %}Initiator
+            {% elif cn.technical_lead.user == request.user %}Technical.L 
+            {% elif cn.program_lead.user == request.user %}Program.L
+            {% elif cn.finance_lead.user == request.user %}Finance.L
+            {% endif%}
+            
+        </td>
+
+       <td>
+       <span class="badge {% if 'Rejected' in cn.approval_status %} bg-red {% elif 'Approved' in cn.approval_status %} bg-green {% else %} bg-warning {% endif %}">{% if cn.approval_status %} {{ cn.approval_status}} {% else %}Pending Submission{% endif %}</span>
+       </td>
+       
+     </tr>
+     {% endfor %}
+ {% endif %}
+    </tbody>
+  </table>
+
+    <!-- Placeholder for the modal -->
+   
+
+    <!-- Empty toast to show the message -->
+  
