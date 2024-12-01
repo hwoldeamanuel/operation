@@ -157,6 +157,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "connection_string": env('AZURE_STORAGEBLOB_CONNECTIONSTRING'),
+            "azure_container": "media",
+        },
+    },
+     "staticfiles": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "connection_string": env('AZURE_STORAGEBLOB_CONNECTIONSTRING'),
+            "azure_container": "static",
+        },
+    },
+}
 
 
 LOGIN_REDIRECT_URL = 'user'
