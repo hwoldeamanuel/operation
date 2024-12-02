@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_select2',
     'django.contrib.humanize',
+    'storages',
     
     
    
