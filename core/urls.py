@@ -30,4 +30,9 @@ urlpatterns = [
    
     path('change_password/', views.change_password, name='change_password'),
     path('change_success/', views.change_success, name='change_success'),
+    path('account/', views.accounts, name='account'),
+    path('fieldoffice/', views.fieldoffice, name='fieldoffice'),
+    path('admin_boundary/', views.admin_boundary, name='admin_boundary'),
+
+
 ]

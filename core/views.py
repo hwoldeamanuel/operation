@@ -95,6 +95,18 @@ def change_password(request):
     return render(request, 'user/password_change_form.html', {
         'form': form
     })
+
 def change_success(request):
     return render(request, 'user/partial/password_change_success.html')
+
+
+def accounts(request):
+    return render(request, 'user/account.html')
+
+def admin_boundary(request):
+    return render(request, 'user/admin_boundary.html')
+
+
+def fieldoffice(request):
+    return render(request, 'user/fieldoffice.html')
 

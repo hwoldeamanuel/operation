@@ -1,26 +1,41 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Gentelella Alela! | </title>
-
-    <!-- Bootstrap -->
+<link rel="icon" href="{% static 'images/shortlog.jpg' %}" type="image/ico" />
+    <title>OPs | </title>
+<link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+      <!-- Bootstrap -->
+   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Font Awesome -->
+    
     <link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
-    <!-- bootstrap-daterangepicker -->
-    <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
-    
     <!-- Custom Theme Style -->
+ <link href="{% static 'vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+     <link href="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+
     <link href="{% static 'build/css/custom.min.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+    <link href="{% static 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+   
+  {% block content_page_css %}
+  {% endblock %}
   </head>
 
   <body class="nav-md">
@@ -54,14 +69,27 @@
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <h3>General</h3>
-                <ul class="nav side-menu">
-                  <li><a><i class="fa fa-home"></i> Fleet Management <span class="fa fa-chevron-down"></span></a>
+                </br>
+                 <ul class="nav side-menu">
+                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="index.html">Vehicles</a></li>
-                      <li><a href="index2.html">Generators</a></li>
+                      <li><a href="index.html">Dashboard</a></li>
+                      <li><a href="index2.html">Dashboard2</a></li>
                      
                     </ul>
                   </li>
+                
+           
+                  <li "{% if 'fleet' in request.path  or 'fleets' in request.path %}active{%endif %}"><a><i class="fa fa-desktop"></i>Fleet Management<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu" style="{% if 'fleet' in request.path or 'fleets' in request.path %}display: block; {%endif %}">
+                         <li class="{% if 'fleets' in request.path or 'fleet' in request.path  %}current-page{%endif%}"><a href="{% url 'fleets' %}" >Fleets</a></li>
+                     <li class="{% if 'generator' in request.path %}current-page{%endif%}"><a href="{% url 'generators' %}" >Generators</a></li>
+                     
+                    </ul>
+                  </li>
+            
+
+            
                   <li><a><i class="fa fa-edit"></i> Monthly Report <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="form.html">Milage </a></li>
@@ -73,7 +101,25 @@
                   
                 </ul>
               </div>
-              
+               <div class="menu_section">
+                <h3>Admin</h3>
+            
+                <ul class="nav side-menu">
+                  <li "{% if 'fieldoffice' in request.path or 'account' in request.path or 'admin_boundary' in request.path %}active{%endif %}"><a><i class="fa fa-gears"></i> System Settings <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu" style="{% if 'fieldoffice' in request.path %}display: block;{% else %}display: none;{% endif %}">
+                      <li class="{% if 'account' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'account' %}" >Account Settings</a></li>
+                     
+                     
+                      <li class="{% if 'fieldoffice' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'fieldoffice' %}">Field Offices</a></li>
+                       <li class="{% if 'admin_boundary' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'admin_boundary' %}">Admin Boundaries</a></li>
+                    </ul>
+                  </li>
+                  
+                          
+                  
+                </ul>
+                
+              </div>
             </div>
             <!-- /sidebar menu -->
 
@@ -124,6 +170,7 @@
                 </ul>
               </nav>
             </div>
+           
           </div>
         <!-- /top navigation -->
 
@@ -160,6 +207,13 @@
     
     <!-- Custom Theme Scripts -->
     <script src="{% static 'build/js/custom.min.js' %}"></script>
-
+    <script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
+    <script src="{% static "dialog.js" %}"></script>
+    <script src="{% static "toast.js" %}"></script>
+<script>
+  document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+  })
+</script>
   </body>
 </html>
