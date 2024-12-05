@@ -192,3 +192,9 @@ def fleet_filter(request):
 
     context = {'fleets': fleets}
     return render(request, 'fleet/partial/fleets_list.html', context)
+
+def download_logsheet(request, id):
+    log_sheet = get_object_or_404(Fleet_Log, id=id)
+    response = HttpResponse(log_sheet.log_sheet, content_type='application/docx')
+    response['Content-Disposition'] = f'attachment; filename="{log_sheet.log_sheet}"'
+    return response

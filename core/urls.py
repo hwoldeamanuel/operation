@@ -17,7 +17,14 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', views.RegisterView.as_view(), name="register"),
     path('password-reset/', ResetPasswordView.as_view(), name='password_reset'),
+    path('profile', views.userprofile, name='userprofile'),
+    path('add_profile/', views.add_profile, name='add_profile'),
+    path('user_profile/', views.user_profile, name='user_profile'),
+    path('newuserprofile/', views.newuserprofile, name='newuserprofile'),
+    path('user_activity/', views.user_activity, name='user_activity'),
+    path('users_list/', views.users_list, name='users_list'),
    
+    path('users_filter/', views.users_filter, name='users_filter'),
     
     
 
@@ -30,7 +37,7 @@ urlpatterns = [
    
     path('change_password/', views.change_password, name='change_password'),
     path('change_success/', views.change_success, name='change_success'),
-    path('account/', views.accounts, name='account'),
+    path('account/', views.user_setting, name='account'),
     path('fieldoffice/', views.fieldoffice, name='fieldoffice'),
     path('admin_boundary/', views.admin_boundary, name='admin_boundary'),
 

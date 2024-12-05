@@ -31,6 +31,8 @@ from django.utils import timezone
 from datetime import datetime, date
 
 from dateutil.relativedelta import relativedelta
+from .forms import ProfileForm, ProfileFormAdd,UserForm
+from easyaudit.models import CRUDEvent, RequestEvent, LoginEvent
 
 
 
@@ -99,9 +101,10 @@ def change_password(request):
 def change_success(request):
     return render(request, 'user/partial/password_change_success.html')
 
-
-def accounts(request):
-    return render(request, 'user/account.html')
+def user_setting(request):
+    users = User.objects.all().order_by('-id')
+    context = {'users': users}
+    return render(request, 'user/users_all.html', context)
 
 def admin_boundary(request):
     return render(request, 'user/admin_boundary.html')
@@ -110,3 +113,167 @@ def admin_boundary(request):
 def fieldoffice(request):
     return render(request, 'user/fieldoffice.html')
 
+def add_profile(request): 
+    user =User.objects.get(pk=request.user.id)
+    if request.method == 'POST':
+        user_form = CustomUserChangeForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=user.profile, user=request.user)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return HttpResponse(
+                status=204,
+                headers={
+                    'HX-Trigger': json.dumps({
+                        "UserprofileChanged": None,
+                        "showMessage": f"{user.email} updated."
+                    })
+                })
+        else:
+            user_form = CustomUserChangeForm(instance=user)
+            profile_form = ProfileForm(instance=user.profile, user=request.user)
+            
+    else:
+       
+        profile_form = ProfileForm(instance=user.profile, user=request.user)
+       
+            
+        user_form = CustomUserChangeForm(instance=user)
+        return render(request, 'user/profile_form.html', {
+        'profile_form': profile_form, 'user_form':user_form
+    })
+    return render(request, 'user/profile_form.html', {
+         'user_form' :CustomUserChangeForm(instance=user),'profile_form': ProfileForm(user=request.user)})
+
+@login_required(login_url='login')
+def user_profile(request): 
+    
+    user = User.objects.get(pk=request.user.id)
+    context = {'user': user}
+        
+    
+    return render(request, 'user/partial/user_profile.html', context)
+
+@login_required(login_url='login')
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_success')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'user/password_change_form.html', {
+        'form': form
+    })
+def change_success(request):
+    return render(request, 'user/partial/password_change_success.html')
+
+@login_required(login_url='login')
+def newuserprofile(request): 
+    user =User.objects.get(pk=request.user.id)
+    if request.method == 'POST':
+       
+        profile_form = ProfileFormAdd(request.POST)
+
+        if profile_form.is_valid():
+            instance = profile_form.save(commit=False)
+            instance.user = user
+            instance.save()
+            return HttpResponse(
+                status=204,
+                headers={
+                    'HX-Trigger': json.dumps({
+                        "UserprofileChanged": None,
+                        "showMessage": f"{user.email} updated."
+                    })
+                })
+    
+    profile_form = ProfileFormAdd(request.POST, user=user)
+    context = {'profile_form':profile_form}
+    return render(request, 'user/partial/profile_form_new.html', context)
+
+def userprofile(request):
+ 
+    user = User.objects.get(pk=request.user.id)
+    context = {'user': user}
+    return render(request, 'user/partial/user_profile.html', context)
+
+def user_activity(request):
+    current_date = date.today()
+    last_month_filter =  current_date - relativedelta(months=1)
+    qs2 = LoginEvent.objects.filter(user_id=request.user.id, datetime__gte=last_month_filter).order_by("datetime__date").values('datetime__date').annotate(count_login=Count('id',distinct=True))
+    
+
+
+    
+    
+
+    all_request = qs2
+
+    context = {'all_request':all_request, }
+    return render(request, 'user/partial/user_activity.html', context)
+
+
+@login_required(login_url='login')  
+def users_list(request):
+    users = User.objects.all().order_by('id')
+    context = {'users': users}
+    return render(request, 'user/partial/user_list.html', context)
+
+
+@login_required(login_url='login')
+def users_filter(request):
+    query = request.GET.get('search', '')
+    
+    all_users = User.objects.all().order_by('id')
+    
+    if query:
+        users = all_users.filter(email__icontains=query)
+       
+    else:
+        users = all_users
+
+    context = {'users': users}
+    return render(request, 'user/partial/user_list.html', context)
+
+
+
+
+
+
+@login_required(login_url='login') 
+def edit_user(request, pk):
+    user =User.objects.get(pk=pk)
+    if request.method == 'POST':
+        user_form = CustomUserChangeForm(request.POST, instance=user)
+        profile_form = UserForm(request.POST, request.FILES, instance=user.profile, user=user)
+
+        if user_form.is_valid and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            
+            return HttpResponse(
+                status=204,
+                headers={
+                    'HX-Trigger': json.dumps({
+                        "UserprofileChanged": None,
+                        "showMessage": f"{user.email} updated."
+                    })
+                })
+        else:
+            user_form = CustomUserChangeForm( instance=user)
+            profile_form = UserForm(instance=user.profile, user=user)
+            
+    else:
+       
+        user_form = CustomUserChangeForm( instance=user)
+        profile_form = UserForm(instance=user.profile, user=user)
+    return render(request, 'partial/account_user_form.html', {
+        'profile_form':profile_form, 'user_form':user_form
+    })

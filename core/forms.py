@@ -1,12 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.models import User
+
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import EmailField
 
 
-from django.contrib.auth.models import User
+from .models import Profile, User
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
@@ -46,3 +46,79 @@ class BasicUserDataForm(forms.Form):
 
   class Meta:
     model = User   
+
+class ProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+      
+        if user:
+            self.fields['reports_to'].queryset = User.objects.all().exclude(id=user.id)
+            self.fields['reports_to'].initial=User.objects.all().exclude(id=user.id).first()
+        
+        self.fields['first_name'].required = True 
+        self.fields['last_name'].required = True
+        self.fields['field_office'].required = True
+        self.fields['contact_number'].required = True
+        self.fields['job_title'].required = True
+     
+    class Meta:
+        model = Profile
+        fields=['first_name',
+            'last_name',
+            'field_office',
+            'contact_number',
+            'job_title',
+           
+            'reports_to',
+            ]
+
+class ProfileFormAdd(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+      
+        if user:
+            self.fields['reports_to'].queryset = User.objects.all().exclude(id=user.id)
+            self.fields['reports_to'].initial=User.objects.all().exclude(id=user.id).first()
+        
+        self.fields['first_name'].required = True 
+        self.fields['last_name'].required = True
+        self.fields['field_office'].required = True
+        self.fields['contact_number'].required = True
+        self.fields['job_title'].required = True
+
+    class Meta:
+        model = Profile
+        fields=['first_name',
+            'last_name',
+            'field_office',
+            'contact_number',
+            'job_title',
+           
+            'reports_to',
+            ]
+
+
+class UserForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+      
+        if user:
+            self.fields['reports_to'].queryset = User.objects.all().exclude(id=user.id)
+            self.fields['reports_to'].initial=User.objects.all().exclude(id=user.id).first()
+        
+        
+        self.fields['first_name'].required = True 
+        self.fields['last_name'].required = True
+        self.fields['portfolio'].required = True
+        self.fields['contact_number'].required = True
+        self.fields['job_title'].required = True
+        
+        
+    
+    class Meta:
+        model = Profile
+        fields="__all__"
+        exclude=['user']

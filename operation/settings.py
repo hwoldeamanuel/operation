@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_select2',
     'django.contrib.humanize',
     'storages',
+    'easyaudit',
     
     
    
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
 ]
 
 ROOT_URLCONF = 'operation.urls'

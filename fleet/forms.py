@@ -95,4 +95,4 @@ class FleetLogForm(forms.ModelForm):
         
       class Meta:
             model = Fleet_Log
-            fields = ['month_log','year_log','start_km','end_km','day_in_use','day_idle','day_in_workshop','workshop_visit']
+            fields = ['month_log','year_log','start_km','end_km','day_in_use','day_idle','day_in_workshop','workshop_visit','log_sheet']

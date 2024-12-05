@@ -20,6 +20,7 @@ class Fleet(models.Model):
     lin_code =  models.CharField(max_length = 255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True,  null=True,  blank=True)
     modified_at = models.DateTimeField(auto_now_add=True,  null=True,  blank=True)
+   
 
     vehicle_pic = models.ImageField(upload_to ='documents/', null=True, blank=True) 
 
@@ -42,6 +43,7 @@ class Fleet_Log(models.Model):
     day_idle = models.IntegerField(null=True, blank=True)
     day_in_workshop = models.IntegerField(null=True, blank=True)
     workshop_visit = models.IntegerField(null=True, blank=True)
+    log_sheet = models.FileField(null=True,  blank=True, upload_to='documents/')
 
     def __str__(self):
         return self.tag_number

@@ -16,7 +16,7 @@ urlpatterns = [
     path('fleet/add/', views.add_fleet, name='add_fleet'),
     path('fleet_filter/', views.fleet_filter, name='fleet_filter'),
     path('fleet_log/add/<int:id>/', views.add_fleet_log, name='add_fleet_log'),
-
+    path('download_log_sheet/<int:id>/', views.download_logsheet, name='download_logsheet'),
     path('generators/', views.generators, name='generators'),
 
 

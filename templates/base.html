@@ -64,17 +64,17 @@
             <!-- /menu profile quick info -->
 
             <br />
-
+ </br>
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <h3>General</h3>
-                </br>
+               
                  <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="index.html">Dashboard</a></li>
-                      <li><a href="index2.html">Dashboard2</a></li>
+                      
                      
                     </ul>
                   </li>
@@ -155,7 +155,7 @@
                       <img src="{% static 'images/user.png' %}" alt="">{{request.user }}
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item"  href="javascript:;"> Profile</a>
+                                           <a class="dropdown-item"  href="{% url 'user' %}"> Profile</a>
                       
                     <a class="dropdown-item"  href="javascript:;">Help</a>
                       <a class="dropdown-item"  href="{% url 'login' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
@@ -210,6 +210,10 @@
     <script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
     <script src="{% static "dialog.js" %}"></script>
     <script src="{% static "toast.js" %}"></script>
+    <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
 <script>
   document.body.addEventListener('htmx:configRequest', (event) => {
       event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
