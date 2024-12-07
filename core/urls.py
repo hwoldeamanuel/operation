@@ -25,6 +25,7 @@ urlpatterns = [
     path('users_list/', views.users_list, name='users_list'),
    
     path('users_filter/', views.users_filter, name='users_filter'),
+
     
     
 

@@ -11,12 +11,12 @@ from django.db.models.functions import TruncMonth
 from collections import defaultdict
 import pandas as pd
 from core.models import User, FieldOffice, Country, Region, Zone, Woreda
-from fleet.models import Fleet, Fleet_Log
+from fleet.models import Fleet, Fleet_Log, Fleet_Expense
 
 
 def run():
-      
-      file = open('C:/Users/Habtamu-MC/Desktop/IPTS/log.csv')
+      Fleet_Expense.objects.all().delete()
+      file = open('C:/Users/Habtamu-MC/Desktop/IPTS/exp.csv')
       read_file = csv.reader(file)
       fleet = Fleet.objects.all()
       fos = FieldOffice.objects.all()
@@ -27,9 +27,10 @@ def run():
              else:
                      for ff in fleet:
                              for fo in fos:
-                                     if ff.tag_number == record[0] and fo.name == record[9]:
-                                             Fleet_Log.objects.create(fleet=ff, tag_number=record[0], field_office=fo, month_log=record[1], year_log=record[2], start_km=record[3], end_km=record[4],
-                                                                  day_in_use=record[6],	day_idle=record[7],	day_in_workshop=record[8], workshop_visit=record[12])
+                                     if ff.tag_number == record[0] and fo.name == record[6]:
+                                             Fleet_Expense.objects.create(fleet=ff, tag_number=record[0], field_office=fo, month_expense=record[1], year_expense=record[2], expense_type=record[3], expense_volume=record[4],
+                                                                  expense_value=record[5], volume_unit=record[7])
+                                             print(fo.name)
 
                                           
 

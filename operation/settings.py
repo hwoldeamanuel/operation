@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'fleet',
-    'generator',
+    'home',
+   
     'django_htmx',
     
     'django_extensions',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
    
   
     'widget_tweaks',
+    'mathfilters',
  
    
  

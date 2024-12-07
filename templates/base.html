@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -58,7 +58,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>{{user.username}}</h2>
+                <h2>{{user}}</h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -73,27 +73,27 @@
                  <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="index.html">Dashboard</a></li>
+                      <li><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'dashboard' %}">Dashboard</a></li>
                       
                      
                     </ul>
                   </li>
                 
            
-                  <li "{% if 'fleet' in request.path  or 'fleets' in request.path %}active{%endif %}"><a><i class="fa fa-desktop"></i>Fleet Management<span class="fa fa-chevron-down"></span></a>
+                  <li "{% if 'fleet' in request.path   %}active{%endif %}"><a><i class="fa fa-desktop"></i>Fleet Management<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu" style="{% if 'fleet' in request.path or 'fleets' in request.path %}display: block; {%endif %}">
-                         <li class="{% if 'fleets' in request.path or 'fleet' in request.path  %}current-page{%endif%}"><a href="{% url 'fleets' %}" >Fleets</a></li>
-                     <li class="{% if 'generator' in request.path %}current-page{%endif%}"><a href="{% url 'generators' %}" >Generators</a></li>
+                         <li class="{% if 'fleets' in request.path %}current-page{%endif%}"><a href="{% url 'fleets' %}" >Fleets</a></li>
+                     <li class="{% if 'generators' in request.path %}current-page{%endif%}"><a href="{% url 'generators' %}" >Generators</a></li>
                      
                     </ul>
                   </li>
             
 
             
-                  <li><a><i class="fa fa-edit"></i> Monthly Report <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">Milage </a></li>
-                      <li><a href="form_advanced.html">Expense</a></li>
+                      <li><a  class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'missing_report' %}">Missing Report </a></li>
+                      <li><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'aggregate_report' %}">Aggregate Report</a></li>
                      
                     </ul>
                   </li>
@@ -107,7 +107,7 @@
                 <ul class="nav side-menu">
                   <li "{% if 'fieldoffice' in request.path or 'account' in request.path or 'admin_boundary' in request.path %}active{%endif %}"><a><i class="fa fa-gears"></i> System Settings <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu" style="{% if 'fieldoffice' in request.path %}display: block;{% else %}display: none;{% endif %}">
-                      <li class="{% if 'account' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'account' %}" >Account Settings</a></li>
+                      <li class="{% if 'account' in request.path %}current-page{%endif%}"><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'account' %}" >Account Settings</a></li>
                      
                      
                       <li class="{% if 'fieldoffice' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'fieldoffice' %}">Field Offices</a></li>
@@ -180,7 +180,7 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+             <a target="_blank" href="https://mercycorps.org"> Mercy Corps Ethiopa </a>- Operation Unit
           </div>
           <div class="clearfix"></div>
         </footer>
@@ -219,5 +219,7 @@
       event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
   })
 </script>
+{% block content_page_js %}
+{% endblock %}
   </body>
 </html>

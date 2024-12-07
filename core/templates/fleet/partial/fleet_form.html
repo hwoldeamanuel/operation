@@ -47,7 +47,34 @@
               
                 <div class="invalid-feedback">{{ form.ownership.errors|first }}</div>
         </div></div>
-        
+        <div class="form-group row">
+           
+                <label class="col-form-label col-md-2 col-sm-2 label-align">Make:</label>
+                   <div class="col-3 col-sm-3">
+                    {% render_field form.make class="form-control form-control-sm"  hx-get="/portfolio/categories/" hx-target="#id_category" hx-swap="innerHTML" %}
+              
+                <div class="invalid-feedback">{{ form.make.errors|first }}</div>
+        </div>
+         <label class="col-form-label col-md-2 col-sm-2 label-align">Make Year:</label>
+                   <div class="col-3 col-sm-3">
+                    {% render_field form.year_make class="form-control form-control-sm"  %}
+              
+                <div class="invalid-feedback">{{ form.year_make.errors|first }}</div>
+        </div></div>
+        <div class="form-group row">
+           
+                <label class="col-form-label col-md-2 col-sm-2 label-align">Driver:</label>
+                   <div class="col-3 col-sm-3">
+                    {% render_field form.driver class="form-control form-control-sm"  hx-get="/portfolio/categories/" hx-target="#id_category" hx-swap="innerHTML" %}
+              
+                <div class="invalid-feedback">{{ form.driver.errors|first }}</div>
+        </div>
+         <label class="col-form-label col-md-2 col-sm-2 label-align">Lin-Code(Rental):</label>
+                   <div class="col-3 col-sm-3">
+                    {% render_field form.lin_code class="form-control form-control-sm"  %}
+              
+                <div class="invalid-feedback">{{ form.lin_code.errors|first }}</div>
+        </div></div>
         <div class="form-group row">
            
                 <label class="col-form-label col-md-2 col-sm-2 label-align">Start Date:</label>

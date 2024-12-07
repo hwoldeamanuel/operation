@@ -18,7 +18,7 @@
            
                 <label class="col-form-label col-md-2 col-sm-2 label-align">Month:</label>
                    <div class="col-3 col-sm-3">
-                    {% render_field form.month_log class="form-control form-control-sm"  %}
+                    {% render_field form.month_log class="form-control form-control-sm" %}
               
                 <div class="invalid-feedback">{{ form.month_log.errors|first }}</div>
         </div>
@@ -27,9 +27,17 @@
                 <label class="col-form-label col-md-2 col-sm-2 label-align">Year:</label>
                    <div class="col-3 col-sm-3">
                     {% render_field form.year_log class="form-control form-control-sm"  %}
+                     {% render_field form.type class="form-control form-control-sm"   %}
               
                 <div class="invalid-feedback">{{ form.year_log.errors|first }}</div>
         </div>
+         
+                   <div class="col-2 col-sm-2">
+                    {% render_field form.fleet class="form-control form-control-sm" %}
+              
+                <div class="invalid-feedback">{{ form.fleet.errors|first }}</div>
+        </div>
+    
         </div>
     
         
@@ -93,8 +101,13 @@
 </div>
 <div class="modal-footer">
 
-    <div class="form-group row">							
+    <div class="form-group row">	
+       						
         <div class="col-md-12 col-sm-12">
+         {% if fleet_log %}
+          <button type="button" class="btn btn-danger btn-sm" hx-post="{% url 'remove_fleetlog' pk=fleet_log.pk %}">Remove</button>
+          <span class="flex-grow-1"></span>
+          {% endif %}
 		 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"> Cancel </button>					       
 
         <button type="submit" class="btn btn-sm btn-xs btn-primary">Save Changes</button>

@@ -98,6 +98,7 @@ def change_password(request):
         'form': form
     })
 
+@login_required(login_url='login')
 def change_success(request):
     return render(request, 'user/partial/password_change_success.html')
 
@@ -106,6 +107,8 @@ def user_setting(request):
     context = {'users': users}
     return render(request, 'user/users_all.html', context)
 
+
+@login_required(login_url='login')
 def admin_boundary(request):
     return render(request, 'user/admin_boundary.html')
 
@@ -113,6 +116,7 @@ def admin_boundary(request):
 def fieldoffice(request):
     return render(request, 'user/fieldoffice.html')
 
+@login_required(login_url='login')
 def add_profile(request): 
     user =User.objects.get(pk=request.user.id)
     if request.method == 'POST':
@@ -130,21 +134,20 @@ def add_profile(request):
                         "showMessage": f"{user.email} updated."
                     })
                 })
-        else:
-            user_form = CustomUserChangeForm(instance=user)
-            profile_form = ProfileForm(instance=user.profile, user=request.user)
-            
-    else:
-       
-        profile_form = ProfileForm(instance=user.profile, user=request.user)
-       
-            
+        
         user_form = CustomUserChangeForm(instance=user)
+        profile_form = ProfileForm(instance=user.profile, user=request.user)
         return render(request, 'user/profile_form.html', {
         'profile_form': profile_form, 'user_form':user_form
-    })
+            })   
+    
+       
+    profile_form = ProfileForm(instance=user.profile, user=request.user)
+    user_form = CustomUserChangeForm(instance=user)
     return render(request, 'user/profile_form.html', {
-         'user_form' :CustomUserChangeForm(instance=user),'profile_form': ProfileForm(user=request.user)})
+        'profile_form': profile_form, 'user_form':user_form
+    })
+   
 
 @login_required(login_url='login')
 def user_profile(request): 
@@ -194,16 +197,22 @@ def newuserprofile(request):
                     })
                 })
     
-    profile_form = ProfileFormAdd(request.POST, user=user)
+        profile_form = ProfileFormAdd(request.POST, user=user)
+        context = {'profile_form':profile_form}
+        return render(request, 'user/partial/profile_form_new.html', context)
+    
+    profile_form = ProfileFormAdd(user=user)
     context = {'profile_form':profile_form}
     return render(request, 'user/partial/profile_form_new.html', context)
 
+@login_required(login_url='login')
 def userprofile(request):
  
     user = User.objects.get(pk=request.user.id)
     context = {'user': user}
     return render(request, 'user/partial/user_profile.html', context)
 
+@login_required(login_url='login')
 def user_activity(request):
     current_date = date.today()
     last_month_filter =  current_date - relativedelta(months=1)
