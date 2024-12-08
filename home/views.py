@@ -16,7 +16,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from core.models import User
 from django.shortcuts import render, redirect
-
+from core.models import User, Profile, FieldOffice
+from fleet.models import *
 import json
 from django.db.models import Max, Avg,Sum,Count
 from django.db.models import Q
@@ -55,6 +56,21 @@ def aggregate_report(request):
 
 @login_required(login_url='login')
 def dashboard(request):
+    total_field_office  =  FieldOffice.objects.count
+    total_fleet =  Fleet.objects.values('tag_number').distinct().count()
+    total_fleet_mc=  Fleet.objects.filter(ownership='Mercy Corps',vehicle_type='Vehicle').values('tag_number').distinct().count()
+    total_fleet_mc_m =  Fleet.objects.filter(ownership='Mercy Corps',vehicle_type='MotorCycle').values('tag_number').distinct().count()
+    total_fleet_r =  Fleet.objects.filter(ownership='Rental').values('tag_number').distinct().count()
     
+    total_user  =  Generator.objects.count
     
-    return render(request, 'report/dashboard.html')
+    ff_gens = FieldOffice.objects.annotate(num_gen=Count('generator')).order_by('-num_gen')
+    ff_fleet = FieldOffice.objects.annotate(num_fleet=Count('assigned_to')).order_by('-num_fleet')
+    ff_fleetr= FieldOffice.objects.filter(assigned_to__ownership ='Rental').annotate(num_fleet=Count('assigned_to')).order_by('-num_fleet')
+    #program_cn = Program.objects.annotate(num_cn=Count("icn__activity",distinct=True) + Count("icn",distinct=True)).filter().order_by('-num_cn')[:12]
+    ff_fleetmo= FieldOffice.objects.filter(assigned_to__vehicle_type ='MotorCycle').annotate(num_fleet=Count('assigned_to')).order_by('-num_fleet')
+   
+    context = {'total_field_office':total_field_office, 'total_fleet':total_fleet, 'total_fleet_mc':total_fleet_mc,
+                'ff_fleetmo':ff_fleetmo,'ff_gens':ff_gens, 'ff_fleetr':ff_fleetr, 'total_fleet_r':total_fleet_r, 'total_user':total_user, 'ff_fleet':ff_fleet, 'total_fleet_mc_m':total_fleet_mc_m}
+    
+    return render(request, 'report/dashboard.html',context)

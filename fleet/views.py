@@ -123,7 +123,10 @@ def edit_fleet_log(request, fid, id):
     if request.method == "POST":
         form = FleetLogFormEdit(request.POST, request.FILES, instance=fleet_log)
         if form.is_valid():
-            instance =form.save()
+            instance =form.save(commit=False)
+            instance.tag_number = fleet.tag_number
+            instance.field_office = fleet.field_office
+            instance.save()
             return HttpResponse(
                 status=204,
                 headers={
@@ -181,8 +184,10 @@ def add_fleet_log(request, id):
     if request.method == "POST":
         form = FleetLogForm(request.POST, request.FILES)
         if form.is_valid():
-            
-            instance = form.save()
+            instance =form.save(commit=False)
+            instance.tag_number = fleet.tag_number
+            instance.field_office = fleet.field_office
+            instance.save()
                         
             return HttpResponse(
                 status=204,
@@ -285,7 +290,10 @@ def edit_fleet_expense(request, fid, id):
     if request.method == "POST":
         form = FleetExpenseFormEdit(request.POST, request.FILES, instance=fleet_expense)
         if form.is_valid():
-            instance =form.save()
+            instance =form.save(commit=False)
+            instance.tag_number = fleet.tag_number
+            instance.field_office = fleet.field_office
+            instance.save()
             return HttpResponse(
                 status=204,
                 headers={
@@ -341,7 +349,10 @@ def add_fleet_expense(request, id):
         form = FleetExpenseForm(request.POST, request.FILES)
         if form.is_valid():
             
-            instance = form.save()
+            instance =form.save(commit=False)
+            instance.tag_number = fleet.tag_number
+            instance.field_office = fleet.field_office
+            instance.save()
                         
             return HttpResponse(
                 status=204,

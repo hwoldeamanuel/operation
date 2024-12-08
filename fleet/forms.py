@@ -198,6 +198,7 @@ class FleetLogFormEdit(forms.ModelForm):
                         (fleet.id, fleet.id) for fleet in Fleet.objects.filter(id=fleet)
                     ]
             self.fields['fleet'].widget.attrs['readonly'] = True
+            self.fields['fleet'].required = True 
             self.fields['month_log'].required = True 
             self.fields['year_log'].required = True 
             self.fields['start_km'].required = True 
@@ -313,7 +314,7 @@ class FleetExpenseFormEdit(forms.ModelForm):
             self.fields['year_expense'].widget = forms.widgets.Select(choices=CHOICES2)
             self.fields['expense_type'].widget = forms.widgets.Select(choices=CHOICES3)
             self.fields['volume_unit'].widget = forms.widgets.Select(choices=CHOICES4)
-
+            self.fields['fleet'].required = True 
             self.fields['month_expense'].required = True 
             self.fields['year_expense'].required = True 
             self.fields['expense_type'].required = True 

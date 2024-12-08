@@ -182,7 +182,7 @@ STORAGES = {
 }
 
 
-LOGIN_REDIRECT_URL = 'user'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Default primary key field type

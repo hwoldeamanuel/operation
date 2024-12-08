@@ -71,6 +71,11 @@ class Fleet_Expense(models.Model):
     volume_unit =  models.CharField(max_length = 255, null=True, blank=True)
     expense_start_date = models.DateField(null=True, blank=True)
 
+    def save(self,*args, **kwargs):
+        super().save(*args, **kwargs)
+        self.expense_start_date = datetime.strptime(self.month_expense + ' 1 ' + str(self.year_expense), '%B %d %Y')
+        super(Fleet_Expense, self).save(*args, **kwargs)
+
 
    
 

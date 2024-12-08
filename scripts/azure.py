@@ -5,16 +5,39 @@ from datetime import datetime
 import pandas as pd
 from django.db.models.functions import TruncMonth
 from django.db.models import Max, Avg,Sum, Count,Min
+from core.models import User , Profile, FieldOffice
 
 def run():
+	file = open('C:/Users/Habtamu-MC/Desktop/IPTS/profile.csv')
+	read_file = csv.reader(file)
+	users = User.objects.all()
+	fos = FieldOffice.objects.all()
+    
+	count = 1
+    
+	for record in read_file:
+		if count == 1:
+			pass
+		else:
+			for user in users:
+				for fo in fos:
+					
+					if user.email == record[2] and fo.name == record[4] :
+						Profile.objects.create(user=user, first_name=record[0], last_name=record[1], 
+							field_office=fo, job_title=record[3])
+					
+			print(record)
+			
+
+		
+		count = count + 1
+
+    
+    
+"""  
 	gen = Generator.objects.get(id=1)
 	x = Generator_Report.objects.filter(generator=gen).annotate(created_at_month=TruncMonth('report_start_date')).values('created_at_month').annotate(ops_hr=Sum('operated_time_hr')).annotate(cost_br=Sum('fuel_cost_br')).order_by('created_at_month')
 	print(x)
-
-    
-	
-
-"""  
       fleet = Fleet.objects.get(id=285)
       x = Fleet_Log.objects.filter(fleet=fleet).annotate(created_at_month=TruncMonth('log_start_date')).values('created_at_month').annotate(km_driven=Sum('km_driven')).order_by('created_at_month')
       y = Fleet_Expense.objects.filter(fleet=fleet).annotate(created_at_month=TruncMonth('expense_start_date')).values('created_at_month').annotate(total_expense=Sum('expense_value')).order_by('created_at_month')

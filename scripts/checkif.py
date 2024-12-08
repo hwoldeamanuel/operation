@@ -15,8 +15,8 @@ from fleet.models import Fleet, Fleet_Log, Fleet_Expense
 
 
 def run():
-      Fleet_Expense.objects.all().delete()
-      file = open('C:/Users/Habtamu-MC/Desktop/IPTS/exp.csv')
+      #Fleet_Expense.objects.all().delete()
+      file = open('C:/Users/Habtamu-MC/Desktop/IPTS/exp3.csv')
       read_file = csv.reader(file)
       fleet = Fleet.objects.all()
       fos = FieldOffice.objects.all()
