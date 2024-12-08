@@ -6,7 +6,7 @@
 {% load static %}
   <script src="{% static 'dist/Chart.bundle.js' %}"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    
+     
 <script>
 
     var MONTHS =   [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}];

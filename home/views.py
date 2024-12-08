@@ -64,7 +64,7 @@ def dashboard(request):
     
     total_user  =  Generator.objects.count
     
-    ff_gens = FieldOffice.objects.annotate(num_gen=Count('generator')).order_by('-num_gen')
+    ff_gens = FieldOffice.objects.annotate(num_gen=Count('generator')).order_by('-num_gen')[:7]
     ff_fleet = FieldOffice.objects.annotate(num_fleet=Count('assigned_to')).order_by('-num_fleet')
     ff_fleetr= FieldOffice.objects.filter(assigned_to__ownership ='Rental').annotate(num_fleet=Count('assigned_to')).order_by('-num_fleet')
     #program_cn = Program.objects.annotate(num_cn=Count("icn__activity",distinct=True) + Count("icn",distinct=True)).filter().order_by('-num_cn')[:12]
