@@ -11,13 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="{% static 'images/shortlog.jpg' %}" type="image/ico" />
     <title>OPs | </title>
+  <!-- Bootstrap -->
 <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link href="cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
       <!-- Bootstrap -->
    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Font Awesome -->
-   
+    
     <link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
@@ -80,7 +81,7 @@
                   </li>
                 
            
-                  <li "{% if 'fleet' in request.path   %}active{%endif %}"><a><i class="fa fa-desktop"></i>Fleet Management<span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-desktop"></i>Fleet Management<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu" style="{% if 'fleet' in request.path or 'fleets' in request.path %}display: block; {%endif %}">
                          <li class="{% if 'fleets' in request.path %}current-page{%endif%}"><a href="{% url 'fleets' %}" >Fleets</a></li>
                      <li class="{% if 'generators' in request.path %}current-page{%endif%}"><a href="{% url 'generators' %}" >Generators</a></li>
@@ -90,16 +91,17 @@
             
 
             
-                  <li "{% if 'report' in request.path   %}active{%endif %}"><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu" style="{% if 'report' in request.path or 'report' in request.path %}display: block; {%endif %}">
-                      <li><a  class="{% if 'missing_report' in request.path %}current-page{%endif%}" href="{% url 'missing_report' %}">Missing Report </a></li>
-                      <li><a  class="{% if 'missing_report' in request.path %}current-page{%endif%}"  href="{% url 'aggregate_report' %}">Aggregate Report</a></li>
+                  <li><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a  class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'missing_report' %}">Missing Report </a></li>
+                      <li><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'aggregate_report' %}">Aggregate Report</a></li>
                      
                     </ul>
-                    
-                  </li>                
+                  </li>
+                 
+                  
                 </ul>
-             </div>
+              </div>
                <div class="menu_section">
                 <h3>Admin</h3>
             
@@ -188,33 +190,75 @@
     </div>
 
     <!-- jQuery -->
-    <script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
-    <!-- Bootstrap -->
-   <script src="{% static 'vendors/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-    <!-- FastClick -->
-    <script src="{% static 'vendors/fastclick/lib/fastclick.js' %}"></script>
-    <!-- NProgress -->
-    <script src="{% static 'vendors/nprogress/nprogress.js' %}"></script>
-    <!-- morris.js -->
-    <script src="{% static 'vendors/raphael/raphael.min.js' %}"></script>
-    <script src="{% static 'vendors/morris.js/morris.min.js' %}"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
-    <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-    
-    <!-- Custom Theme Scripts -->
-    <script src="{% static 'build/js/custom.min.js' %}"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
-    <script src="{% static "dialog.js" %}"></script>
-    <script src="{% static "toast.js" %}"></script>
-    <script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
-    <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
-    <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
-    <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{% static 'dist/Chart.bundle.js' %}"></script>
+   <!-- jQuery -->
+ <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="{% static 'dist/Chart.bundle.js' %}"></script>
+
+ <!-- jQuery -->
+<script src="{% static 'vendors/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'vendors/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'vendors/fastclick/lib/fastclick.js' %}"></script>
+<!-- NProgress -->
+<script src="{% static 'vendors/nprogress/nprogress.js' %}"></script>
+<!-- iCheck -->
+<script src="{% static 'vendors/iCheck/icheck.min.js' %}"></script>
+<script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+<script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
+<!-- jQuery Sparklines -->
+<script src="{% static 'vendors/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+<!-- Flot -->
+<script src="{% static 'vendors/Flot/jquery.flot.js' %}"></script>
+<script src="{% static 'vendors/Flot/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'vendors/Flot/jquery.flot.time.js' %}"></script>
+<script src="{% static 'vendors/Flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'vendors/Flot/jquery.flot.resize.js' %}"></script>
+<!-- Flot plugins -->
+<script src="{% static 'vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+<script src="{% static 'vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+<script src="{% static 'vendors/flot.curvedlines/curvedLines.js' %}"></script>
+<!-- DateJS -->
+<script src="{% static 'vendors/DateJS/build/date.js' %}"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+<!-- jQuery Sparklines -->
+
+<!-- bootstrap-progressbar -->
+<script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+<!-- Custom Theme Scripts -->
+
+<script src="{% static 'build/js/custom.min.js' %}"></script>
+<script src="https://unpkg.com/htmx.org@1.6.1"></script>
+<script src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
+<script src="{% static "dialog.js" %}"></script>
+<script src="{% static "toast.js" %}"></script>
+<script src="{% static 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+<script src="{% static 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+<script src="{% static 'vendors/jszip/dist/jszip.min.js' %}"></script>
+<script src="{% static 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+<script src="{% static 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+<script src="{% static 'vendors/validator/multifield.js' %}"></script>
+<script src="{% static 'vendors/validator/validator.js' %}"></script>
+
+</body>
+</html>
+
 <script>
   document.body.addEventListener('htmx:configRequest', (event) => {
       event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
@@ -222,5 +266,12 @@
 </script>
 {% block content_page_js %}
 {% endblock %}
+    <!-- Datatables -->
+    
+
+   
+
+  
+	
   </body>
 </html>

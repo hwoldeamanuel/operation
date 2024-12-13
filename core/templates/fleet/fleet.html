@@ -3,8 +3,9 @@
 
 
 {% block content %}
-{% load static %} 
-
+{% load static %}
+  <script src="{% static 'dist/Chart.bundle.js' %}"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 <!-- page content -->
         <div class="right_col" role="main">
@@ -248,87 +249,5 @@
         </div>
         <!-- /page content -->
    
-{% endblock %}
-{% block content_page_js %}
-
-<script>
-   
-    var MONTHS =   [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}];
-   
-
-    var randomScalingFactor = function() {
-      return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
-    };
-    var randomColorFactor = function() {
-      return Math.round(Math.random() * 255);
-    };
-    var randomColor = function(opacity) {
-      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
-    };
- 
-    var ctx = document.getElementById("canvas").getContext("2d");
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}],
-
-        datasets: [{
-          label: "KM Driven (KM)",
-          data: [{% for cn in all_request.km_driven %} {{ cn }}, {% endfor %}],
-        
-
-
-          borderColor:'rgba(51, 137, 173, .8)',
-          backgroundColor:'rgba(51, 137, 173, .6)',
-          pointBorderColor :'rgba(51, 137, 173, .4)',
-          pointBackgroundColor : 'rgba(51, 137, 173, .4)',
-          pointBorderWidth : .5,
-
-        },  {
-          label: "Total Expense (ETB)",
-         data: [{% for cn in all_request.total_expense %} {{ cn }}, {% endfor %}],
-         borderColor:'rgb(210, 43, 43, .5)',
-         backgroundColor:'rgba(51, 137, 173, .4)',
-         pointBorderColor :'rgba(51, 137, 173, .4)',
-         pointBackgroundColor : 'rgba(51, 137, 173, .4)',
-         pointBorderWidth : .5,
-
-        },]
-      },
-      options: {
-        responsive: true,
-        title:{
-          display:false,
-          text:"Chart.js Line Chart - Stacked Area"
-        },
-        tooltips: {
-          mode: 'label',
-        },
-        hover: {
-          mode: 'label'
-        },
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: false,
-              labelString: 'Month'
-            }
-          }],
-          yAxes: [{
-            stacked: true,
-            scaleLabel: {
-              display: false,
-              labelString: '# of conceptnot'
-            }
-          }]
-        }
-      }
-    });
-      
-
-
-      
-
-</script>
 
 {% endblock %}
