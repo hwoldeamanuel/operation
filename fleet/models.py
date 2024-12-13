@@ -117,3 +117,103 @@ class Generator_Report(models.Model):
 
 
 
+class Test(models.Model):
+    field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True)
+    tag_number = models.CharField(max_length = 255, null=True, blank=True)
+    vehicle_type = models.CharField(max_length = 255, null=True, blank=True)
+    chassis_number = models.CharField(max_length = 255, null=True, blank=True)
+    year_make = models.CharField(max_length = 255, null=True, blank=True)
+    ownership = models.CharField(max_length = 255, null=True, blank=True)
+    driver = models.CharField(max_length = 255, null=True, blank=True)
+    
+    make = models.CharField(max_length = 255, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
+    lin_code =  models.CharField(max_length = 255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True,  null=True,  blank=True)
+    modified_at = models.DateTimeField(auto_now_add=True,  null=True,  blank=True)
+   
+
+    vehicle_pic = models.ImageField(upload_to ='documents/', null=True, blank=True) 
+
+    class Meta:
+        managed = False
+        db_table = 'test'
+
+
+class Missing_Log(models.Model):
+    id = models.IntegerField(primary_key=True)
+    field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True)
+    tag_number = models.CharField(max_length = 255, null=True, blank=True)
+    vehicle_type = models.CharField(max_length = 255, null=True, blank=True)
+    ownership = models.CharField(max_length = 255, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    generate_series = models.DateField(null=True, blank=True)
+    month = models.CharField(null=True, blank=True)
+    year = models.IntegerField(null=True, blank=True)
+    year2 = models.IntegerField(null=True, blank=True)
+
+
+
+
+    class Meta:
+        managed = False
+        db_table = 'missing_log'
+
+
+class Missing_Expense(models.Model):
+    id = models.IntegerField(primary_key=True)
+    field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True)
+    tag_number = models.CharField(max_length = 255, null=True, blank=True)
+    vehicle_type = models.CharField(max_length = 255, null=True, blank=True)
+    ownership = models.CharField(max_length = 255, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    generate_series = models.DateField(null=True, blank=True)
+    expense_start_date = models.DateField(null=True, blank=True)
+    fuel_cost = models.CharField(max_length = 255, null=True, blank=True)
+    cost_spares = models.CharField(max_length = 255, null=True, blank=True)
+    cost_labour = models.CharField(max_length = 255, null=True, blank=True)
+    cost_consumables = models.CharField(max_length = 255, null=True, blank=True)
+    rental_and_tax = models.CharField(max_length = 255, null=True, blank=True)
+    rental_fees = models.CharField(max_length = 255, null=True, blank=True)
+    tax_insurance = models.CharField(max_length = 255, null=True, blank=True)
+    month = models.CharField(null=True, blank=True)
+    year = models.IntegerField(null=True, blank=True)
+
+
+
+    class Meta:
+        managed = False
+        db_table = 'missing_expense'
+
+
+
+class Missed_Expense(models.Model):
+    id = models.IntegerField(primary_key=True)
+    field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True)
+    tag_number = models.CharField(max_length = 255, null=True, blank=True)
+    vehicle_type = models.CharField(max_length = 255, null=True, blank=True)
+    ownership = models.CharField(max_length = 255, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    generate_series = models.DateField(null=True, blank=True)
+    expense_start_date = models.DateField(null=True, blank=True)
+    fuel_cost = models.CharField(max_length = 255, null=True, blank=True)
+    cost_spares = models.CharField(max_length = 255, null=True, blank=True)
+    cost_labour = models.CharField(max_length = 255, null=True, blank=True)
+    cost_consumables = models.CharField(max_length = 255, null=True, blank=True)
+    rental_and_tax = models.CharField(max_length = 255, null=True, blank=True)
+    rental_fees = models.CharField(max_length = 255, null=True, blank=True)
+    tax_insurance = models.CharField(max_length = 255, null=True, blank=True)
+    month = models.CharField(null=True, blank=True)
+    year = models.IntegerField(null=True, blank=True)
+    fleet_id = models.IntegerField(null=True, blank=True)
+
+
+
+    class Meta:
+        managed = False
+        db_table = 'expenses'

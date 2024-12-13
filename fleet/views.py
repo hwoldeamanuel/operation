@@ -396,6 +396,12 @@ def fleet_activity(request, id):
         all_request = xdf
         all_request['km_driven'] = all_request['km_driven'].fillna(0)
         all_request['km_driven'] = all_request['km_driven'].astype(int)
+    
+    elif xdf.empty and not ydf.empty:
+        all_request = ydf
+        all_request['total_expense'] = all_request['total_expense'].fillna(0)
+        all_request['total_expense'] = all_request['total_expense'].astype(int)
+
 
     elif ydf.empty and xdf.empty:
         all_request = pd.DataFrame(columns=['created_at_month', 'km_driven', 'total_expense'])

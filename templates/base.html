@@ -17,7 +17,7 @@
    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Font Awesome -->
-    
+   
     <link href="{% static 'vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{% static 'vendors/nprogress/nprogress.css' %}" rel="stylesheet">
@@ -90,17 +90,16 @@
             
 
             
-                  <li><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a  class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'missing_report' %}">Missing Report </a></li>
-                      <li><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'aggregate_report' %}">Aggregate Report</a></li>
+                  <li "{% if 'report' in request.path   %}active{%endif %}"><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu" style="{% if 'report' in request.path or 'report' in request.path %}display: block; {%endif %}">
+                      <li><a  class="{% if 'missing_report' in request.path %}current-page{%endif%}" href="{% url 'missing_report' %}">Missing Report </a></li>
+                      <li><a  class="{% if 'missing_report' in request.path %}current-page{%endif%}"  href="{% url 'aggregate_report' %}">Aggregate Report</a></li>
                      
                     </ul>
-                  </li>
-                 
-                  
+                    
+                  </li>                
                 </ul>
-              </div>
+             </div>
                <div class="menu_section">
                 <h3>Admin</h3>
             
@@ -214,6 +213,8 @@
     <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
     <script src="{% static 'vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
     <script src="{% static 'vendors/Chart.js/dist/Chart.min.js' %}"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static 'dist/Chart.bundle.js' %}"></script>
 <script>
   document.body.addEventListener('htmx:configRequest', (event) => {
       event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';

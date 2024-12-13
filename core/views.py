@@ -219,10 +219,6 @@ def user_activity(request):
     qs2 = LoginEvent.objects.filter(user_id=request.user.id, datetime__gte=last_month_filter).order_by("datetime__date").values('datetime__date').annotate(count_login=Count('id',distinct=True))
     
 
-
-    
-    
-
     all_request = qs2
 
     context = {'all_request':all_request, }
