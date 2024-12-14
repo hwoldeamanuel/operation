@@ -94,7 +94,7 @@
                   <li><a><i class="fa fa-edit"></i> Reports <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a  class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'missing_report' %}">Missing Report </a></li>
-                      <li><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'aggregate_report' %}">Aggregate Report</a></li>
+                      <li><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'aggregate_report' %}">Periodic Report</a></li>
                      
                     </ul>
                   </li>
@@ -111,8 +111,7 @@
                       <li class="{% if 'account' in request.path %}current-page{%endif%}"><a a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}"  href="{% url 'account' %}" >Account Settings</a></li>
                      
                      
-                      <li class="{% if 'fieldoffice' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'fieldoffice' %}">Field Offices</a></li>
-                       <li class="{% if 'admin_boundary' in request.path %}current-page{%endif%}"><a class="{% if request.user.is_superuser == False %}nav-link disabled{% endif %}" href="{% url 'admin_boundary' %}">Admin Boundaries</a></li>
+                     
                     </ul>
                   </li>
                   

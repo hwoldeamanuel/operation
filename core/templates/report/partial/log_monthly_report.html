@@ -38,7 +38,7 @@
                           <td>{{mr.ownership}}</td>
                           <td>{{mr.month_log}}</td>
                            <td>{{mr.year_log}}</td>
-                                <td>{{mr.km_driven}}</td>
+                                <td>{{mr.km_driven|floatformat:"2g"}}</td>
                         <td> {% widthratio mr.day_available mr.day_total 100 %}%</td>
                          <td> {% widthratio mr.day_use mr.day_total 100 %}%</td>
                           <td><a target="_blank" href="{% url 'fleet' mr.id %}"> View </a></td>
@@ -58,7 +58,7 @@
                          <th>Field Office</th>
                            <th>Tag Number</th>
                             <th>Type</th>
-                             <th>Ownership</th>
+                             
                           <th>Month</th>
                           <th>Year</th>
                           <th>Total Cost</th>
@@ -74,14 +74,16 @@
                           <th scope="row">{{forloop.counter}}</th>
                           <td>{{me.field_office}}</td>
                           <td>{{me.tag_number}}</td>
-                          <td>{{me.vehicle_type}}</td>
-                          <td>{{me.ownership}}</td>
+                          <td>{{me.vehicle_type}} </br>
+                         <small>{{me.ownership}}</small>
+                          </td>
+                          
                           <td>{{me.month_expense}}</td>
                            <td>{{me.year_expense}}</td> 
-                            <td>{{me.total_cost}}</td> 
-                               <td>{{me.fuel_cost}}</td> 
-                                  <td>{% if me.ownership == 'Mercy Corps' %}{{me.spare_cost|add:me.consumable_cost|add:me.labour_cost|add:me.rental_and_tax_cost|add:me.tax_cost}}{% else %} 0 {% endif %}</td> 
-                                   <td>{% if me.ownership == 'Rental' %}{{me.rental_and_tax_cost|add:me.rental_cost}}{% else %} 0{% endif %}</td> 
+                            <td>{{me.total_cost|floatformat:"2g"}}</td> 
+                               <td>{{me.fuel_cost|floatformat:"2g"}}</td> 
+                                  <td>{% if me.ownership == 'Mercy Corps' %}{{me.spare_cost|add:me.consumable_cost|add:me.labour_cost|add:me.rental_and_tax_cost|add:me.tax_cost|floatformat:"2g"}}{% else %} 0.00 {% endif %}</td> 
+                                   <td>{% if me.ownership == 'Rental' %}{{me.rental_and_tax_cost|add:me.rental_cost|floatformat:"2g"}}{% else %}0.00{% endif %}</td> 
                        <td><a target="_blank" href="{% url 'fleet' me.id %}"> View </a></td>
                        </tr>
                           
