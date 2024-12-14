@@ -2,12 +2,13 @@
  {% extends 'base.html' %}
 
 {% block content %}
-{% load static %} 
- <div class="right_col" role="main">
+
+ <!-- page content -->
+        <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Under Development</h3>
+                <h3>Report</h3>
               </div>
 
               <div class="title_right">
@@ -28,7 +29,7 @@
               <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Plain Page</h2>
+                    <h2>Missing Monthly Log and Expense</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -44,13 +45,107 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
-                      Add content to the page ...
+                  <div class="x_content" style="min-height: 350px;" >
+                     <div class="col-md-12 col-sm-12"  id="reportform">   
+                     {% load widget_tweaks %}
+  
+
+
+                    {% with WIDGET_ERROR_CLASS='is-invalid' %}
+<form  hx-post="/report/monthly_report/"  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' hx-target="#newreport"> 
+ {% csrf_token %}
+   <div class="form-group row">
+   <label class="col-form-label col-md-2 col-sm-2 label-align">Field Office:</label>
+                   <div class="col-2 col-sm-2">
+                    {% render_field form.field_office class="form-control form-control-sm"  %}
+              
+                <div class="invalid-feedback">{{ form.field_office.errors|first }}</div>
+        </div>
+           
+                <label class="col-form-label col-md-1 col-sm-1 label-align">Month:</label>
+                   <div class="col-2 col-sm-2">
+                    {% render_field form.month class="form-control form-control-sm"  %}
+              
+                <div class="invalid-feedback">{{ form.month.errors|first }}</div>
+        </div>
+    <label class="col-form-label col-md-1 col-sm-1 label-align">Year:</label>
+                   <div class="col-2 col-sm-2">
+                    {% render_field form.year class="form-control form-control-sm"  %}
+              
+                <div class="invalid-feedback">{{ form.year.errors|first }}</div>
+        </div>
+    <button type="submit" class="btn btn-sm btn-round btn-info" 
+                 
+                 >Report</button>
+</form> 
+{% endwith %}
+                    </div>
+                     <div class="ln_solid"></div></p>
+                 <div class="col-md-12 col-sm-12"  id="newreport">   
+
+                    <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home1" role="tab" aria-controls="home" aria-selected="true">Fleet Log Report</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile1" role="tab" aria-controls="profile" aria-selected="false">Fleet Expense Report</a>
+                      </li>
+                      
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="home1" role="tabpanel" aria-labelledby="home-tab">
+                       
+                    Total Monthly Fleet Log: 
+                     <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Field Office</th>
+                           <th>Tag Number</th>
+                            <th>Type</th>
+                             <th>Ownership</th>
+                          <th>Month</th>
+                          <th>Year</th>
+                          <th>Fleet Log ?</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                      </table>
+                     </div>
+                      
+                      <div class="tab-pane fade" id="profile1" role="tabpanel" aria-labelledby="profile-tab">
+                         Total Monthly Fleet Expense:
+                     <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Field Office</th>
+                           <th>Tag Number</th>
+                            <th>Type</th>
+                             <th>Ownership</th>
+                          <th>Month</th>
+                          <th>Year</th>
+                          <th>Fleet Expense ?</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                      </table>
+                      </div>
+                      
+                    </div>
+
+                  </div>
+                      
+                      </div>
+                     
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- /page content -->
         <!-- /page content -->
     {% endblock %}

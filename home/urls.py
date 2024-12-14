@@ -16,5 +16,6 @@ urlpatterns = [
     path('generate_report/', views.generate_report, name='generate_report'),
     path('years/', views.years, name='years'),
     path('get_report_form/', views.get_report_form, name='get_report_form'),
+    path('monthly_report/', views.monthly_report, name='monthly_report'),
 
 ]

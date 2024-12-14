@@ -1,7 +1,15 @@
 
 
- <canvas id="canvas" height="300" width="679" style="width: 503px; height: 251px;"></canvas>
-
+ <div style="width:100%;"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; inset: 0px;"></iframe>
+      <canvas id="canvas" height="300" width="679" style="width: 503px; height: 251px;"></canvas>
+  </div>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+  </style>
 {% block content_page_js %}
 
 <script>
@@ -49,6 +57,14 @@
       },
       options: {
         responsive: true,
+         plugins: {
+            legend: {
+                display: true,
+                labels: {
+                    color: 'rgb(255, 99, 132)'
+                }
+            }
+        },
         title:{
           display:false,
           text:"Chart.js Line Chart - Stacked Area"

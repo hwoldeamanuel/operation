@@ -49,20 +49,67 @@
 
                 <div class="row x_title">
                   <div class="col-md-6">
-                    <h3>Flield Offices' <small>Total Fleet</small></h3>
+                    <h3><small>Mercy Corps' Fleet</small></h3>
                   </div>
-                  <div class="col-md-6">
-                    <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                      <span>November 9, 2024 - December 8, 2024</span> <b class="caret"></b>
-                    </div>
-                  </div>
+                  
                 </div>
 
                 <div class="col-md-12 col-sm-12">
                   <div style="width: 100%">
                        <canvas id="myChart" width="400" height="100"></canvas>
                       </div>
+                </div>
+                
+
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+          </div>
+          <br>
+ <div class="row">
+            <div class="col-md-12 col-sm-12 ">
+              <div class="dashboard_graph">
+
+                <div class="row x_title">
+                  <div class="col-md-6">
+                    <h3><small>Km Driven Vs. Total Expense</small></h3>
+                  </div>
+                  <div class="col-md-6">
+                    
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+                 <div style="width:100%;"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; inset: 0px;"></iframe>
+      <canvas id="canvas" height="200" width="679" style="width: 503px; height: 251px;"></canvas>
+  </div>
+                </div>
+                
+
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 ">
+              <div class="dashboard_graph">
+
+                <div class="row x_title">
+                  <div class="col-md-6">
+                    <h3><small>Vehicle Availablilty (%) Vs. Usage (%)</small></h3>
+                  </div>
+                  <div class="col-md-6">
+                    
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+                 <div style="width:100%;"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; inset: 0px;"></iframe>
+      <canvas id="mychart2" height="200" width="679" style="width: 503px; height: 251px;"></canvas>
+  </div>
                 </div>
                 
 
@@ -211,37 +258,208 @@
 
             {% block content_page_js %}
 <script>
+   
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [{%  for m in ff_fleet.name %} "{{ m }}", {% endfor %}],
 
-var ctx = document.getElementById("myChart").getContext("2d");
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    
-    
-    data: {
-        labels: [{% for ff in ff_fleet %}  "{{ff }}",{% endfor %}],
         datasets: [{
-            label:'# of Fleet',
-            
-            data: [{% for ff in ff_fleet %} {{  ff.num_fleet   }},{% endfor %}],
-            backgroundColor: [{% for ff in ff_fleet  %} 'rgba(38, 185, 154, 1)',{% endfor %}
-                
-            ],
-            borderColor: [{% for ff in ff_fleet  %} 'rgba(38, 185, 154, 1)',{% endfor %}
-                
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
-</script>
+          label: "Vehicle",
+          data: [{% for v in ff_fleet.num_vfleet %} {{ v }}, {% endfor %}],
+        
 
+
+          borderColor:'rgba(26, 187, 156, 1)',
+          backgroundColor:'rgba(26, 187, 156, 1)',
+          pointBorderColor :'rgba(26, 187, 156, 1)',
+          pointBackgroundColor : 'rgba(26, 187, 156, 1)',
+          pointBorderWidth : .5,
+
+        },  {
+          label: "MotorCycle",
+         data: [{% for m in ff_fleet.num_mfleet %} {{ m }}, {% endfor %}],
+         borderColor:'rgba(26, 187, 156, .4)',
+         backgroundColor:'rgba(26, 187, 156, .4)',
+         pointBorderColor :'rgba(26, 187, 156, .4)',
+         pointBackgroundColor : 'rgba(26, 187, 156, .4)',
+         pointBorderWidth : .5,
+
+        },]
+      },
+      options: {
+                    title:{
+                        display:false,
+                        text:"Chart.js Bar Chart - Stacked"
+                    },
+                    tooltips: {
+                        mode: 'label'
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    }
+                }
+    });
+      
+
+</script>
+<script>
+    var MONTHS =   [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}];
+   
+
+    var randomScalingFactor = function() {
+      return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
+    };
+    var randomColorFactor = function() {
+      return Math.round(Math.random() * 255);
+    };
+    var randomColor = function(opacity) {
+      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
+    };
+ 
+    var ctx = document.getElementById("canvas").getContext("2d");
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}],
+
+        datasets: [{
+          label: "KM Driven (KM)",
+          data: [{% for cn in all_request.km_driven %} {{ cn }}, {% endfor %}],
+          yAxisID: "y-axis-1",
+        
+
+
+          borderColor:'rgb(0, 255, 255, .8)',
+          backgroundColor:'rgba(51, 137, 173, .6)',
+          pointBorderColor :'rgba(51, 137, 173, .4)',
+          pointBackgroundColor : 'rgba(51, 137, 173, .4)',
+          pointBorderWidth : .5,
+
+        },  {
+          label: "Total Expense (ETB)",
+         data: [{% for cn in all_request.total_expense %} {{ cn }}, {% endfor %}],
+         yAxisID: "y-axis-2",
+         borderColor:'rgb(210, 43, 43, .5)',
+         backgroundColor:'rgba(51, 137, 173, .4)',
+         pointBorderColor :'rgba(51, 137, 173, .4)',
+         pointBackgroundColor : 'rgba(51, 137, 173, .4)',
+         pointBorderWidth : .5,
+
+        },]
+      },
+      options: {
+                responsive: true,
+                hoverMode: 'label',
+                stacked: false,
+                title:{
+                    display:false,
+                    text:'Chart.js Line Chart - Multi Axis'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            offsetGridLines: false
+                        }
+                    }],
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }],
+                }
+            }
+    });
+      
+
+   
+
+  
+
+
+      
+
+</script>
+<script>
+
+   var MONTHS =   [{%  for m in fdf.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}];
+  
+ 
+   var ctx = document.getElementById("mychart2").getContext("2d");
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [{%  for m in fdf.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}],
+
+        datasets: [{
+          label: "Availablilty(%)",
+          data: [{% for cn in fdf.avalablity %} {{ cn }}, {% endfor %}],
+          borderColor:'rgba(26, 187, 156, .4)',
+          backgroundColor:'rgba(26, 187, 156, .4)',
+          pointBorderColor :'rgba(51, 137, 173, .4)',
+          pointBackgroundColor : 'rgba(51, 137, 173, .4)',
+          pointBorderWidth : .5,
+
+        },  {
+          label: "Usage(%)",
+         data: [{% for cn in fdf.usage %} {{ cn }}, {% endfor %}],
+         borderColor:'rgba(26, 187, 156, 1)',
+         backgroundColor:'rgba(26, 187, 156, 1)',
+         pointBorderColor :'rgba(51, 137, 173, .4)',
+         pointBackgroundColor : 'rgba(51, 137, 173, .4)',
+         pointBorderWidth : .5,
+
+        },]
+      },
+      options: {
+        responsive: true,
+        title:{
+          display:false,
+          text:"Chart.js Line Chart - Stacked Area"
+        },
+        tooltips: {
+          mode: 'label',
+        },
+        hover: {
+          mode: 'label'
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: false,
+              labelString: 'Month'
+            }
+          }],
+          yAxes: [{
+            stacked: false,
+            scaleLabel: {
+              display: true,
+              labelString: '%'
+            }
+          }]
+        }
+      }
+    });
+      
+
+</script>
 {% endblock %}

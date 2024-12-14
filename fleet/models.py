@@ -217,3 +217,50 @@ class Missed_Expense(models.Model):
     class Meta:
         managed = False
         db_table = 'expenses'
+
+
+class Log_Report(models.Model):
+    id = models.IntegerField(primary_key=True)
+    field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True)
+    tag_number = models.CharField(max_length = 255, null=True, blank=True)
+    vehicle_type = models.CharField(max_length = 255, null=True, blank=True)
+    ownership = models.CharField(max_length = 255, null=True, blank=True)
+    month_log = models.CharField(max_length = 255, null=True, blank=True)
+    year_log = models.IntegerField(null=True, blank=True)
+    km_driven = models.FloatField(null=True, blank=True)
+    day_use = models.IntegerField(null=True, blank=True)
+    day_available = models.IntegerField(null=True, blank=True)
+    day_total = models.IntegerField(null=True, blank=True)
+    log_start_date = models.DateField(null=True, blank=True)
+   
+
+
+    class Meta:
+        managed = False
+        db_table = 'log_report'
+
+
+class Expense_Report(models.Model):
+    id = models.IntegerField(primary_key=True)
+    field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True)
+    tag_number = models.CharField(max_length = 255, null=True, blank=True)
+    vehicle_type = models.CharField(max_length = 255, null=True, blank=True)
+    ownership = models.CharField(max_length = 255, null=True, blank=True)
+    expense_start_date = models.DateField(null=True, blank=True)
+    month_expense = models.CharField(max_length = 255, null=True, blank=True)
+    year_expense = models.IntegerField(null=True, blank=True)
+    total_cost = models.FloatField(null=True, blank=True)
+    spare_cost = models.FloatField(null=True, blank=True)
+    fuel_cost = models.FloatField(null=True, blank=True)
+    consumable_cost = models.FloatField(null=True, blank=True)
+    rental_and_tax_cost = models.FloatField(null=True, blank=True)
+    labour_cost = models.FloatField(null=True, blank=True)
+    rental_cost = models.FloatField(null=True, blank=True)
+    tax_cost = models.FloatField(null=True, blank=True)
+
+
+
+
+    class Meta:
+        managed = False
+        db_table = 'expense_report'
