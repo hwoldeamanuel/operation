@@ -566,3 +566,9 @@ def generator_profile(request, id):
     return render(request, 'generator/partial/generator_profile.html', context)
 
 
+@login_required(login_url='login')
+def download_gen_logsheet(request, id):
+    document = get_object_or_404(Generator_Report, id=id)
+    response = HttpResponse(document.gen_log_sheet, content_type='application/docx')
+    response['Content-Disposition'] = f'attachment; filename="{document.gen_log_sheet}"'
+    return response

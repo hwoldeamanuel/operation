@@ -80,7 +80,15 @@
                    
         </div>
 
-
+<div class="form-group row">
+           
+                <label class="col-form-label col-md-2 col-sm-2 label-align">Logsheet</label>
+                   <div class="col-3 col-sm-3">
+                    {% render_field form.gen_log_sheet class="form-control form-control-sm"   %}
+              
+                <div class="invalid-feedback">{{ form.gen_log_sheet.errors|first }}</div>
+        </div>
+   
    
         </div>
     

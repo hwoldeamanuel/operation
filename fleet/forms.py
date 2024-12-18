@@ -478,7 +478,7 @@ class GeneratorReportForm(forms.ModelForm):
                   self.fields[field].required = True 
       class Meta:
             model = Generator_Report
-            fields = ['generator','month_report', 'year_report','operated_time_hr', 'fuel_used_lt','fuel_cost_br','repair_cost_br']
+            fields = ['generator','month_report', 'year_report','operated_time_hr', 'fuel_used_lt','fuel_cost_br','repair_cost_br','gen_log_sheet']
       
       def clean(self):
             cleaned_data = super().clean()
@@ -538,6 +538,6 @@ class GeneratorReportFormEdit(forms.ModelForm):
                   self.fields[field].required = True 
       class Meta:
             model = Generator_Report
-            fields = ['generator','month_report', 'year_report','operated_time_hr', 'fuel_used_lt','fuel_cost_br','repair_cost_br']
+            fields = ['generator','month_report','gen_log_sheet', 'year_report','operated_time_hr', 'fuel_used_lt','fuel_cost_br','repair_cost_br']
       
      

@@ -22,7 +22,7 @@ urlpatterns = [
     path('partial_fleet_log/<int:id>/', views.partial_fleet_log, name='partial_fleet_log'),
     path('removefleetlog/<int:pk>/', views.remove_fleetlog, name='remove_fleetlog'),
     path('fleet_activity/<int:id>/', views.fleet_activity, name='fleet_activity'),
-
+    path('download_gen_log_sheet/<int:id>/', views.download_gen_logsheet, name='download_gen_logsheet'),
     path('edit_fleet_expense/<int:fid>/<int:id>/', views.edit_fleet_expense, name='edit_fleet_expense'),
     path('partial_fleet_expense/<int:id>/', views.partial_fleet_expense, name='partial_fleet_expense'),
     path('removefleetexpense/<int:pk>/', views.remove_fleetexpense, name='remove_fleetexpense'),

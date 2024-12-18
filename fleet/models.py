@@ -104,6 +104,7 @@ class Generator_Report(models.Model):
     fuel_cost_br = models.FloatField(null=True, blank=True)
     repair_cost_br = models.FloatField(null=True, blank=True)
     report_start_date = models.DateField(null=True, blank=True)
+    gen_log_sheet = models.FileField(null=True,  blank=True, upload_to='documents/')
 
     
     def save(self,*args, **kwargs):
