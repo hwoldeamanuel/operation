@@ -4,6 +4,7 @@ from django.db import models
 from core.models import FieldOffice
 from core.models import Profile
 from datetime import datetime
+from django.db.models import Max, Avg,Sum,Count
 
 class Fleet(models.Model):
     field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True, related_name='assigned_to')
@@ -76,7 +77,13 @@ class Fleet_Expense(models.Model):
         self.expense_start_date = datetime.strptime(self.month_expense + ' 1 ' + str(self.year_expense), '%B %d %Y')
         super(Fleet_Expense, self).save(*args, **kwargs)
 
-
+    def get_kmpl(self):
+        if self.expense_type == 'Fuel cost' and self.expense_volume > 0:
+            total_fuel = Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self.fleet, expense_start_date = self.expense_start_date).aggregate(Sum('expense_volume'))['expense_volume__sum']
+            total_km   = Fleet_Log.objects.filter(fleet = self.fleet, log_start_date = self.expense_start_date).aggregate(Sum('km_driven'))['km_driven__sum']
+            return total_km/total_fuel
+        else:
+            return None
    
 
     def __str__(self):

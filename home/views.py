@@ -249,11 +249,12 @@ def monthly_report(request):
         
         total_log = monthly_report.count()
         total_expense = monthly_expense.count()
-       
+        total_day_available =  sum(monthly_report.values_list('day_available', flat=True))
+        total_day_total = sum(monthly_report.values_list('day_total', flat=True))
 
        
         
-        context = {'monthly_report':monthly_report ,'monthly_expense': monthly_expense, 'total_log':total_log, 'total_expense':total_expense}
+        context = {'monthly_report':monthly_report ,'monthly_expense': monthly_expense, 'total_log':total_log, 'total_expense':total_expense, 'total_day_available':total_day_available, 'total_day_total':total_day_total}
        
             
     

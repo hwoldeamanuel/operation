@@ -14,11 +14,12 @@ from fleet.models import Fleet, Fleet_Log, Fleet_Expense, Generator, Generator_R
 
 
 def run():
-      #Fleet_Expense.objects.all().delete()
-      file = open('C:/Users/Habtamu-MC/Desktop/IPTS/gen_r.csv')
-      read_file = csv.reader(file)
-    
-      gens = Generator.objects.all()
+     
+      total_fuel = Fleet_Expense.objects.filter(expense_type = 'Fuel cost').aggregate(Sum('expense_volume'))['expense_volume__sum']
+      total_km   = Fleet_Log.objects.aggregate(Sum('km_driven'))['km_driven__sum']
+      
+      print(total_km)
+      """ gens = Generator.objects.all()
       count = 1
       for record in read_file:
              
@@ -39,4 +40,4 @@ def run():
                                                          #ownership=record[4], field_office=ff, start_date=record[11], end_date=record[12], lin_code=record[17])
                 
              count = count + 1
-	
+	 """

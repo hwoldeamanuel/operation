@@ -8,6 +8,7 @@
                                  <th>Volume</th>
                                  <th>Unit</th>
                                   <th>Value(ETB)</th>
+                                  <th>Km./1Lt.</th>
                                  <th>Edit</th>
                                 </tr>
                               </thead>
@@ -22,6 +23,7 @@
                                    <td>{{expense.expense_volume}}</td>
                                     <td>{{expense.volume_unit}}</td>
                                      <td>{{expense.expense_value}}</td>
+                                     <td>{{expense.get_kmpl|floatformat:"2g"}}</td>
                                      <td>
                                   <a hx-get="{% url 'edit_fleet_expense' expense.fleet_id expense.id %}" hx-target="#dialog" ><i class="fa fa-edit"></i></a>
                                   </td>

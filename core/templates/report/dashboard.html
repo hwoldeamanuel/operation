@@ -4,6 +4,7 @@
 
 {% block content %}
 {% load static %} 
+
 <div class="right_col" role="main" style="min-height: 2005.67px;">
           <!-- top tiles -->
           <div class="row" style="display: inline-block;">
@@ -325,6 +326,13 @@
     };
  
     var ctx = document.getElementById("canvas").getContext("2d");
+    const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ETB"
+});
+   const formatter2 = new Intl.NumberFormat("en-US", {
+   
+});
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -375,11 +383,22 @@
                         display: true,
                         position: "left",
                         id: "y-axis-1",
+                         ticks: {
+                    callback: (label, index, labels) => {
+                        return formatter2.format(label);
+                    }
+                },
+                         
                     }, {
                         type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                         display: true,
                         position: "right",
                         id: "y-axis-2",
+                        ticks: {
+                    callback: (label, index, labels) => {
+                        return formatter.format(label);
+                    }
+                },
 
                         // grid line settings
                         gridLines: {
@@ -412,7 +431,7 @@
 
         datasets: [{
           label: "Availablilty(%)",
-          data: [{% for cn in fdf.avalablity %} {{ cn }}, {% endfor %}],
+          data: [{% for cn in fdf.avalablity %} {{ cn}}, {% endfor %}],
           borderColor:'rgba(26, 187, 156, .4)',
           backgroundColor:'rgba(26, 187, 156, .4)',
           pointBorderColor :'rgba(51, 137, 173, .4)',

@@ -27,6 +27,15 @@
     };
  
     var ctx = document.getElementById("canvas").getContext("2d");
+    const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ETB"
+});
+   const formatter2 = new Intl.NumberFormat("en-US", {
+    style: "number",
+    number: "KM"
+   
+});
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -35,6 +44,7 @@
         datasets: [{
           label: "KM Driven (KM)",
           data: [{% for cn in all_request.km_driven %} {{ cn }}, {% endfor %}],
+          yAxisID: "y-axis-1",
         
 
 
@@ -47,6 +57,7 @@
         },  {
           label: "Total Expense (ETB)",
          data: [{% for cn in all_request.total_expense %} {{ cn }}, {% endfor %}],
+         yAxisID: "y-axis-2",
          borderColor:'rgb(210, 43, 43, .5)',
          backgroundColor:'rgba(51, 137, 173, .4)',
          pointBorderColor :'rgba(51, 137, 173, .4)',
@@ -56,41 +67,49 @@
         },]
       },
       options: {
-        responsive: true,
-         plugins: {
-            legend: {
-                display: true,
-                labels: {
-                    color: 'rgb(255, 99, 132)'
+                responsive: true,
+                hoverMode: 'label',
+                stacked: false,
+                title:{
+                    display:false,
+                    text:'Chart.js Line Chart - Multi Axis'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            offsetGridLines: false
+                        }
+                    }],
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                         ticks: {
+                    callback: (label, index, labels) => {
+                        return formatter2.format(label);
+                    }
+                },
+                         
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+                        ticks: {
+                    callback: (label, index, labels) => {
+                        return formatter.format(label);
+                    }
+                },
+
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }],
                 }
             }
-        },
-        title:{
-          display:false,
-          text:"Chart.js Line Chart - Stacked Area"
-        },
-        tooltips: {
-          mode: 'label',
-        },
-        hover: {
-          mode: 'label'
-        },
-        scales: {
-          xAxes: [{
-            scaleLabel: {
-              display: false,
-              labelString: 'Month'
-            }
-          }],
-          yAxes: [{
-            stacked: true,
-            scaleLabel: {
-              display: false,
-              labelString: '# of conceptnot'
-            }
-          }]
-        }
-      }
     });
       
 
