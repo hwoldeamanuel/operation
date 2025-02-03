@@ -29,6 +29,14 @@ class Fleet(models.Model):
     class Meta:
         unique_together = ('field_office', 'tag_number')
     
+    def get_total_kmpl(self):
+        total_fuel = Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self).aggregate(Sum('expense_volume'))['expense_volume__sum']
+        total_km   = Fleet_Log.objects.filter(fleet = self).aggregate(Sum('km_driven'))['km_driven__sum']
+        if total_fuel is not None and total_km is not None and total_fuel >0 and total_km > 0:
+            return total_km/total_fuel
+        else:
+            return None
+    
     def __str__(self):
         return self.tag_number
 

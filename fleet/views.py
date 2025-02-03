@@ -57,8 +57,38 @@ def fleet(request, id):
     fleet = get_object_or_404(Fleet,id=id)
     fleet_log = Fleet_Log.objects.filter(fleet=fleet).order_by('log_start_date')
     fleet_expense = Fleet_Expense.objects.filter(fleet=fleet).order_by('expense_start_date')
+    fleet = Fleet.objects.get(id=id)
+    x = Fleet_Log.objects.filter(fleet=fleet).annotate(created_at_month=TruncMonth('log_start_date')).values('created_at_month').annotate(km_driven=Sum('km_driven')).order_by('created_at_month')
+    y = Fleet_Expense.objects.filter(fleet=fleet).annotate(created_at_month=TruncMonth('expense_start_date')).values('created_at_month').annotate(total_expense=Sum('expense_value')).order_by('created_at_month')
+    ydf = pd.DataFrame.from_dict(y)
+    xdf = pd.DataFrame.from_dict(x)
+
     
-    context = {'fleet':fleet, 'fleet_log':fleet_log, 'fleet_expense':fleet_expense, }
+    if not ydf.empty and not xdf.empty:
+        all_request = xdf.merge(ydf, how='outer')
+        all_request['km_driven'] = all_request['km_driven'].fillna(0)
+        all_request['km_driven'] = all_request['km_driven'].astype(int)
+        all_request['total_expense'] = all_request['total_expense'].fillna(0)
+        all_request['total_expense'] = all_request['total_expense'].astype(int)
+
+    elif ydf.empty and not xdf.empty:
+        all_request = xdf
+        
+        all_request['km_driven'] = all_request['km_driven'].astype(int)
+        all_request['km_driven'] = all_request['km_driven'].fillna(0)
+    
+    elif xdf.empty and not ydf.empty:
+        all_request = ydf
+        all_request['total_expense'] = all_request['total_expense'].fillna(0)
+        all_request['total_expense'] = all_request['total_expense'].astype(int)
+
+
+    elif ydf.empty and xdf.empty:
+        all_request = pd.DataFrame(columns=['created_at_month', 'km_driven', 'total_expense'])
+
+
+    
+    context = {'fleet':fleet, 'fleet_log':fleet_log, 'fleet_expense':fleet_expense, 'all_request': all_request }
     
     return render(request, 'fleet/fleet.html', context)
 

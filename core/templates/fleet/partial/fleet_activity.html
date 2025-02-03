@@ -1,15 +1,9 @@
 
 
  <div style="width:100%;"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; inset: 0px;"></iframe>
-      <canvas id="canvas" height="300" width="679" style="width: 503px; height: 251px;"></canvas>
+      <canvas id="mycanvas" height="300" width="679" style="width: 503px; height: 251px;"></canvas>
   </div>
-<style>
-    canvas {
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-    }
-  </style>
+
 {% block content_page_js %}
 
 <script>
@@ -26,14 +20,12 @@
       return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
     };
  
-    var ctx = document.getElementById("canvas").getContext("2d");
+    var ctx = document.getElementById("mycanvas").getContext("2d");
     const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "ETB"
 });
    const formatter2 = new Intl.NumberFormat("en-US", {
-    style: "number",
-    number: "KM"
    
 });
     var myChart = new Chart(ctx, {
@@ -99,7 +91,7 @@
                         id: "y-axis-2",
                         ticks: {
                     callback: (label, index, labels) => {
-                        return formatter.format(label);
+                        return formatter2.format(label);
                     }
                 },
 
@@ -121,7 +113,5 @@
       
 
 </script>
-{% load static %}
-  <script src="{% static 'dist/Chart.bundle.js' %}"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
   {% endblock content_page_js %}
