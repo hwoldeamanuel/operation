@@ -67,7 +67,7 @@
                          <li>Ownership:
                         <strong> {{fleet.ownership}}</strong></li>
                         <li>KM/1 Liter(Fuel):
-                        <strong> {{fleet.get_total_kmpl|floatformat:"1g"}} Km</strong></li>
+                        <strong> {% if fleet.get_total_kmpl %} {{fleet.get_total_kmpl|floatformat:"1g"}} {% endif %} Km</strong></li>
 
                         
                          <li>Chassis #:

@@ -32,7 +32,7 @@ class Fleet(models.Model):
     def get_total_kmpl(self):
         total_fuel = Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self).aggregate(Sum('expense_volume'))['expense_volume__sum']
         total_km   = Fleet_Log.objects.filter(fleet = self).aggregate(Sum('km_driven'))['km_driven__sum']
-        if total_fuel is not None and total_km is not None and total_fuel >0 and total_km > 0:
+        if total_fuel is not None and total_km is not None and total_fuel > 0 and total_km > 0:
             return total_km/total_fuel
         else:
             return None
@@ -86,10 +86,13 @@ class Fleet_Expense(models.Model):
         super(Fleet_Expense, self).save(*args, **kwargs)
 
     def get_kmpl(self):
-        if self.expense_type == 'Fuel cost' and self.expense_volume > 0:
+        if Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self.fleet, expense_start_date = self.expense_start_date).exists() and Fleet_Log.objects.filter(fleet = self.fleet, log_start_date = self.expense_start_date).exists():
             total_fuel = Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self.fleet, expense_start_date = self.expense_start_date).aggregate(Sum('expense_volume'))['expense_volume__sum']
             total_km   = Fleet_Log.objects.filter(fleet = self.fleet, log_start_date = self.expense_start_date).aggregate(Sum('km_driven'))['km_driven__sum']
-            return total_km/total_fuel
+            if total_fuel > 0 and total_km > 0:
+                return total_km/total_fuel
+            else:
+                return None
         else:
             return None
    
