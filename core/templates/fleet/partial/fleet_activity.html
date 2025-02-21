@@ -4,18 +4,8 @@
   {% block content_page_js %}
   {% load static %}
   <script src="{% static 'dist/Chart.bundle.js' %}"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-var MONTHS =   [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}];
-var randomScalingFactor = function() {
-      return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
-    };
-var randomColorFactor = function() {
-      return Math.round(Math.random() * 255);
-    };
-var randomColor = function(opacity) {
-      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
-    };
 
 var ctx = document.getElementById("mycanvas").getContext("2d");
 var myChart = new Chart(ctx, {
@@ -64,22 +54,14 @@ var myChart = new Chart(ctx, {
                         display: true,
                         position: "left",
                         id: "y-axis-1",
-                         ticks: {
-                    callback: (label, index, labels) => {
-                        return formatter2.format(label);
-                    }
-                },
+                       
                          
                     }, {
                         type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
                         display: true,
                         position: "right",
                         id: "y-axis-2",
-                        ticks: {
-                    callback: (label, index, labels) => {
-                        return formatter2.format(label);
-                    }
-                },
+                        
 
                         // grid line settings
                         gridLines: {

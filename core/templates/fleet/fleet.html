@@ -114,9 +114,9 @@
                         
                       </div>
                       <!-- start of user-activity-graph -->
-                                  <div  style="width: 100%;" hx-trigger="FleetListChanged from:body,  FleetExpenseChanged from:body" hx-get= "{% url 'fleet_activity' fleet.id %}" hx-target="#fleet_activity"  >  
+                                  <div  style="width: 100%;" hx-trigger="load, FleetListChanged from:body,  FleetExpenseChanged from:body" hx-get= "{% url 'fleet_activity' fleet.id %}" hx-target="#fleet_activity"  >  
      <div id="fleet_activity">
-      <canvas id="mycanvas" height="300" width="679" style="width: 503px; height: 251px;"></canvas>
+    
   </div>
     </div>
                       <!-- end of user-activity-graph -->
@@ -261,111 +261,7 @@
 {% endblock  %}
 
 {% block content_page_js %}
-<script>
-    var MONTHS =   [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}];
-   
-
-    var randomScalingFactor = function() {
-      return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
-    };
-    var randomColorFactor = function() {
-      return Math.round(Math.random() * 255);
-    };
-    var randomColor = function(opacity) {
-      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
-    };
- 
-    var ctx = document.getElementById("mycanvas").getContext("2d");
-    const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "ETB"
-});
-   const formatter2 = new Intl.NumberFormat("en-US", {
-   
-});
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [{%  for m in all_request.created_at_month %} "{{ m|date:'M-y' }}", {% endfor %}],
-
-        datasets: [{
-          label: "KM Driven (KM)",
-          data: [{% for cn in all_request.km_driven %} {{ cn }}, {% endfor %}],
-          yAxisID: "y-axis-1",
-        
-
-
-          borderColor:'rgb(0, 255, 255, .8)',
-          backgroundColor:'rgba(51, 137, 173, .6)',
-          pointBorderColor :'rgba(51, 137, 173, .4)',
-          pointBackgroundColor : 'rgba(51, 137, 173, .4)',
-          pointBorderWidth : .5,
-
-        },  {
-          label: "Total Expense (ETB)",
-         data: [{% for cn in all_request.total_expense %} {{ cn }}, {% endfor %}],
-         yAxisID: "y-axis-2",
-         borderColor:'rgb(210, 43, 43, .5)',
-         backgroundColor:'rgba(51, 137, 173, .4)',
-         pointBorderColor :'rgba(51, 137, 173, .4)',
-         pointBackgroundColor : 'rgba(51, 137, 173, .4)',
-         pointBorderWidth : .5,
-
-        },]
-      },
-      options: {
-                responsive: true,
-                hoverMode: 'label',
-                stacked: false,
-                title:{
-                    display:false,
-                    text:'Chart.js Line Chart - Multi Axis'
-                },
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        gridLines: {
-                            offsetGridLines: false
-                        }
-                    }],
-                    yAxes: [{
-                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: "left",
-                        id: "y-axis-1",
-                         ticks: {
-                    callback: (label, index, labels) => {
-                        return formatter2.format(label);
-                    }
-                },
-                         
-                    }, {
-                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: "right",
-                        id: "y-axis-2",
-                        ticks: {
-                    callback: (label, index, labels) => {
-                        return formatter2.format(label);
-                    }
-                },
-
-                        // grid line settings
-                        gridLines: {
-                            drawOnChartArea: false, // only want the grid lines for one axis to show up
-                        },
-                    }],
-                }
-            }
-    });
-      
-
-   
-
-  
-
-
-      
-
-</script>
+  {% load static %}
+  <script src="{% static 'dist/Chart.bundle.js' %}"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 {% endblock %}
