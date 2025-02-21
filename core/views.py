@@ -214,9 +214,25 @@ def userprofile(request):
 
 @login_required(login_url='login')
 def user_activity(request):
-    current_date = date.today()
-    last_month_filter =  current_date - relativedelta(months=1)
-    qs2 = LoginEvent.objects.filter(user_id=request.user.id, datetime__gte=last_month_filter).order_by("datetime__date").values('datetime__date').annotate(count_login=Count('id',distinct=True))
+    if request.GET.get('reservation', ''):
+        
+        query = request.GET.get('reservation', '')
+        query = query.split("-")
+        #for q in query:
+        start_date = query[0].strip()
+        end_date = query[1].strip()
+       
+        start_date = datetime.strptime(start_date, '%m/%d/%Y')
+        end_date = datetime.strptime(end_date, '%m/%d/%Y')
+        
+      
+       
+       
+        qs2 = LoginEvent.objects.filter(user_id=request.user.id,  datetime__date__gte=start_date, datetime__date__lte=end_date).order_by("datetime__date").values('datetime__date').annotate(count_login=Count('id', distinct=True))
+    else:
+        current_date = date.today()
+        last_month_filter =  current_date - relativedelta(months=1)
+        qs2 = LoginEvent.objects.filter(user_id=request.user.id, datetime__gte=last_month_filter).order_by("datetime__date").values('datetime__date').annotate(count_login=Count('id',distinct=True))
     
 
     all_request = qs2

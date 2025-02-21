@@ -153,7 +153,9 @@ class FleetLogForm(forms.ModelForm):
                  self._errors['day_in_use'] = self.error_class(['Check number of days'])
            elif (end_km < start_km):
                  self._errors['end_km'] = self.error_class(['Check start end km'])
-        
+            
+           elif (start_date > datetime.today()):
+                 self._errors['month_log'] = self.error_class(['Not valid date'])
            return cleaned_data
 
 class FleetLogFormEdit(forms.ModelForm):
@@ -244,6 +246,8 @@ class FleetLogFormEdit(forms.ModelForm):
                  self._errors['day_in_use'] = self.error_class(['Check number of days'])
            elif (end_km < start_km):
                  self._errors['end_km'] = self.error_class(['Check start end km'])
+           elif (start_date > datetime.today()):
+                 self._errors['month_log'] = self.error_class(['Not valid date'])
         
            return cleaned_data
       
@@ -325,7 +329,21 @@ class FleetExpenseFormEdit(forms.ModelForm):
       class Meta:
             model = Fleet_Expense
             fields = ['fleet','month_expense','year_expense','expense_type','expense_volume','volume_unit', 'expense_value']
+      def clean(self):
+           cleaned_data = super().clean()
+           month = self.cleaned_data.get('month_expense')
+           year = self.cleaned_data.get('year_expense')
+           
 
+           
+           start_date = datetime.strptime(month + ' 1 ' + str(year), '%B %d %Y')
+           
+          
+           if (start_date > datetime.today()):
+                 self._errors['month_expense'] = self.error_class(['Not valid date'])
+        
+           return cleaned_data
+      
 
 class FleetExpenseForm(forms.ModelForm):
       def __init__(self, *args, **kwargs):
@@ -412,9 +430,13 @@ class FleetExpenseForm(forms.ModelForm):
             expense_type = self.cleaned_data.get('expense_type')
            
         
+            start_date = datetime.strptime(month + ' 1 ' + str(year), '%B %d %Y')
+           
           
+            if (start_date > datetime.today()):
+                 self._errors['month_expense'] = self.error_class(['Not valid date'])
 
-            if Fleet_Expense.objects.filter(fleet=fleet, month_expense=month, year_expense=year, expense_type=expense_type).exists():
+            elif Fleet_Expense.objects.filter(fleet=fleet, month_expense=month, year_expense=year, expense_type=expense_type).exists():
                  self._errors['month_expense'] = self.error_class(['Expense Already Exists'])
            
         

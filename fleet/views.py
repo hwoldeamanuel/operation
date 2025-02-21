@@ -86,7 +86,9 @@ def fleet(request, id):
     elif ydf.empty and xdf.empty:
         all_request = pd.DataFrame(columns=['created_at_month', 'km_driven', 'total_expense'])
 
-
+    all_request = all_request.sort_values(['created_at_month'],ascending = False).head(12)
+    all_request = all_request.sort_values(['created_at_month'],ascending = True)
+    context = {'all_request': all_request }
     
     context = {'fleet':fleet, 'fleet_log':fleet_log, 'fleet_expense':fleet_expense, 'all_request': all_request }
     
@@ -408,7 +410,8 @@ def add_fleet_expense(request, id):
 
 @login_required(login_url='login')
 def fleet_activity(request, id):
-    fleet = Fleet.objects.get(id=id)
+   
+    fleet = get_object_or_404(Fleet,id=id)
     x = Fleet_Log.objects.filter(fleet=fleet).annotate(created_at_month=TruncMonth('log_start_date')).values('created_at_month').annotate(km_driven=Sum('km_driven')).order_by('created_at_month')
     y = Fleet_Expense.objects.filter(fleet=fleet).annotate(created_at_month=TruncMonth('expense_start_date')).values('created_at_month').annotate(total_expense=Sum('expense_value')).order_by('created_at_month')
     ydf = pd.DataFrame.from_dict(y)
@@ -418,24 +421,28 @@ def fleet_activity(request, id):
     if not ydf.empty and not xdf.empty:
         all_request = xdf.merge(ydf, how='outer')
         all_request['km_driven'] = all_request['km_driven'].fillna(0)
-        all_request['km_driven'] = all_request['km_driven'].astype(int)
+        all_request['km_driven'] = all_request['km_driven'].astype(float)
         all_request['total_expense'] = all_request['total_expense'].fillna(0)
-        all_request['total_expense'] = all_request['total_expense'].astype(int)
+        all_request['total_expense'] = all_request['total_expense'].astype(float)
 
     elif ydf.empty and not xdf.empty:
         all_request = xdf
+        
+        all_request['km_driven'] = all_request['km_driven'].astype(float)
         all_request['km_driven'] = all_request['km_driven'].fillna(0)
-        all_request['km_driven'] = all_request['km_driven'].astype(int)
     
     elif xdf.empty and not ydf.empty:
         all_request = ydf
         all_request['total_expense'] = all_request['total_expense'].fillna(0)
-        all_request['total_expense'] = all_request['total_expense'].astype(int)
+        all_request['total_expense'] = all_request['total_expense'].astype(float)
 
 
     elif ydf.empty and xdf.empty:
         all_request = pd.DataFrame(columns=['created_at_month', 'km_driven', 'total_expense'])
 
+
+    all_request = all_request.sort_values(['created_at_month'],ascending = False).head(12)
+    all_request = all_request.sort_values(['created_at_month'],ascending = True)
     context = {'all_request': all_request }
     return render(request, 'fleet/partial/fleet_activity.html', context)
 

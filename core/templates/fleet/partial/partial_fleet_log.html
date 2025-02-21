@@ -27,9 +27,9 @@
                                 <tr>
                                   <td>{{log.month_log}}</td>
                                   <td>{{log.year_log}}</td>
-                                 <td>{{log.start_km}}</td>
-                                  <td>{{log.end_km}}</td>
-                                    <td>{{log.km_driven}}</td>
+                                 <td>{{log.start_km|floatformat:"2g"}}</td>
+                                  <td>{{log.end_km|floatformat:"2g"}}</td>
+                                    <td>{{log.km_driven|floatformat:"2g"}}</td>
                                   <td>{{log.day_in_use}}</td>
                                   <td>{{log.day_idle}}</td>
                                    <td>{{log.day_in_workshop}}</td>

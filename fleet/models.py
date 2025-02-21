@@ -89,7 +89,8 @@ class Fleet_Expense(models.Model):
         if Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self.fleet, expense_start_date = self.expense_start_date).exists() and Fleet_Log.objects.filter(fleet = self.fleet, log_start_date = self.expense_start_date).exists():
             total_fuel = Fleet_Expense.objects.filter(expense_type = 'Fuel cost', fleet = self.fleet, expense_start_date = self.expense_start_date).aggregate(Sum('expense_volume'))['expense_volume__sum']
             total_km   = Fleet_Log.objects.filter(fleet = self.fleet, log_start_date = self.expense_start_date).aggregate(Sum('km_driven'))['km_driven__sum']
-            if total_fuel > 0 and total_km > 0:
+            
+            if (total_fuel != None and total_fuel > 0 ) and (total_km != None and total_km > 0):
                 return total_km/total_fuel
             else:
                 return None
