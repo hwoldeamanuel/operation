@@ -66,10 +66,14 @@
                         <strong> {{fleet.vehicle_type}}</strong></li>
                          <li>Ownership:
                         <strong> {{fleet.ownership}}</strong></li>
+                        <li>KM Driven/Month (Avg.):
+                        <strong> {% if fleet.get_avg_kd != none %} {{fleet.get_avg_kd|floatformat:"1g"}} {% endif %} Km</strong></li>
                         <li>KM/1 Liter(Fuel):
-                        <strong> {% if fleet.get_total_kmpl %} {{fleet.get_total_kmpl|floatformat:"1g"}} {% endif %} Km</strong></li>
-
-                        
+                        <strong> {% if fleet.get_total_kmpl != none %} {{fleet.get_total_kmpl|floatformat:"1g"}} {% endif %} Km</strong></li>
+                      <li>Availability(%):
+                        <strong> {% if fleet.get_avail != none %} {{fleet.get_avail|floatformat:"1g" }} {% endif %}%</strong></li>
+                        <li>Usage(%):
+                        <strong> {% if fleet.get_usage != none %} {{fleet.get_usage|floatformat:"1g" }} {% endif %}%</strong></li>
                          <li>Chassis #:
                         <strong> {{fleet.chassis_number}}</strong></li>
                          <li>Make:
@@ -114,9 +118,9 @@
                         
                       </div>
                       <!-- start of user-activity-graph -->
-                                  <div  style="width: 100%;" hx-trigger="load, FleetListChanged from:body,  FleetExpenseChanged from:body" hx-get= "{% url 'fleet_activity' fleet.id %}" hx-target="#fleet_activity"  >  
+                                  <div  style="width: 100%;" hx-trigger=" FleetListChanged from:body,  FleetExpenseChanged from:body" hx-get= "{% url 'fleet_activity' fleet.id %}" hx-target="#fleet_activity"  >  
      <div id="fleet_activity">
-    
+   <canvas id="mycanvas" height="300" width="792" ></canvas>
   </div>
     </div>
                       <!-- end of user-activity-graph -->
@@ -239,29 +243,118 @@
                                     </div>
                           </div>
 
-                          <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
-                            <p>xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui
-                              photo booth letterpress, commodo enim craft beer mlkshk </p>
-                          </div>
+                         
                         </div>
+                </div>
+                      </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-             </div><div class="modal fade bs-example-modal-lg" id="modal" class="modal fade">
+          </div><div class="modal fade bs-example-modal-lg" id="modal" class="modal fade">
                        <div id="dialog" class="modal-dialog modal-lg" hx-target="this"></div>
                     </div>
-          </div>
         </div>
         <!-- /page content -->
    
 
 {% endblock  %}
-
 {% block content_page_js %}
-  {% load static %}
-  <script src="{% static 'dist/Chart.bundle.js' %}"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+ 
+
+
+<script>
+
+var MONTHS = [{% for m in all_request.created_at_month %} "{{ m|date:'M-y'}}", {% endfor %}];
+var randomScalingFactor = function() {
+      return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
+    };
+var randomColorFactor = function() {
+      return Math.round(Math.random() * 255);
+    };
+var randomColor = function(opacity) {
+      return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
+    };
+var ctx = document.getElementById("mycanvas").getContext("2d");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    
+    
+     data: {
+        labels: [{% for m in all_request.created_at_month  %} "{{ m|date:'M-y'}}", {% endfor %}],
+        datasets: [{
+          label: "KM Driven (KM)",
+          data: [{% for cn in all_request.km_driven %} {{ cn }}, {% endfor %}],
+          borderColor:'rgb(0, 255, 255, .8)',
+          backgroundColor:'rgba(51, 137, 173, .6)',
+          pointBorderColor :'rgba(51, 137, 173, .4)',
+          pointBackgroundColor : 'rgba(51, 137, 173, .4)',
+          pointBorderWidth : .5,
+          yAxisID: "y-axis-1",
+        },  {
+           label: "Total Expense (ETB)",
+          data: [{% for cn in all_request.total_expense %} {{ cn }}, {% endfor %}],
+          borderColor:'rgb(210, 43, 43, .5)',
+          backgroundColor:'rgba(51, 137, 173, .4)',
+          pointBorderColor :'rgba(51, 137, 173, .4)',
+          pointBackgroundColor : 'rgba(51, 137, 173, .4)',
+          pointBorderWidth : .5,
+          yAxisID: "y-axis-2",
+        },  ]
+      },
+    options: {
+                responsive: true,
+                hoverMode: 'label',
+                stacked: false,
+                title:{
+                    display:false,
+                    text:'Chart.js Line Chart - Multi Axis'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            offsetGridLines: false
+                        }
+                    }],
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                        ticks: {
+                    // Include a dollar sign in the ticks
+                    callback: function (value) {
+                                return value.toLocaleString();
+                            }
+                },
+                       
+                         
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+                        ticks: {
+                    // Include a dollar sign in the ticks
+                    callback: function (value) {
+                                return  value.toLocaleString();
+                            }
+                },
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }],
+                }
+            },
+  
+
+});
+ 
+
+</script>
+
 {% endblock %}

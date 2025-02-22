@@ -23,6 +23,14 @@
                         <strong> {{fleet.vehicle_type}}</strong></li>
                          <li>Ownership:
                         <strong> {{fleet.ownership}}</strong></li>
+                         <li>KM Driven/Month (Avg.):
+                        <strong> {% if fleet.get_avg_kd != none %} {{fleet.get_avg_kd|floatformat:"1g"}} {% endif %} Km</strong></li>
+                         <li>KM/1 Liter(Fuel):
+                        <strong> {% if fleet.get_total_kmpl != none %} {{fleet.get_total_kmpl|floatformat:"1g"}} {% endif %} Km</strong></li>
+                      <li>Availability(%):
+                        <strong> {% if fleet.get_avail != none %} {{fleet.get_avail|floatformat:"1g" }} {% endif %}%</strong></li>
+                        <li>Usage(%):
+                        <strong> {% if fleet.get_usage != none %} {{fleet.get_usage|floatformat:"1g" }} {% endif %}%</strong></li>
                          <li>Chassis #:
                         <strong> {{fleet.chassis_number}}</strong></li>
                          <li>Make:

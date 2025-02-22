@@ -6,6 +6,7 @@ from core.models import Profile
 from datetime import datetime
 from django.db.models import Max, Avg,Sum,Count
 
+
 class Fleet(models.Model):
     field_office = models.ForeignKey(FieldOffice, on_delete= models.DO_NOTHING, null=True,  blank=True, related_name='assigned_to')
     tag_number = models.CharField(max_length = 255, null=True, blank=True)
@@ -36,7 +37,35 @@ class Fleet(models.Model):
             return total_km/total_fuel
         else:
             return None
-    
+    def get_avail(self):
+        day_total =  Log_Report.objects.filter(id = self.id).aggregate(Sum('day_total'))['day_total__sum']
+        day_available =  Log_Report.objects.filter(id = self.id).aggregate(Sum('day_available'))['day_available__sum']
+        day_use =  Log_Report.objects.filter(id = self.id).aggregate(Sum('day_available'))['day_available__sum']
+        if day_total is not None and day_available is not None and day_total > 0 and day_available > 0:
+            return (day_available/day_total)*100
+        else:
+            return None
+    def get_usage(self):
+      
+        day_available =  Log_Report.objects.filter(id = self.id).aggregate(Sum('day_available'))['day_available__sum']
+        day_use =  Log_Report.objects.filter(id = self.id).aggregate(Sum('day_use'))['day_use__sum']
+       
+        if day_use is not None and day_available is not None  and day_available > 0:
+          
+            return (day_use/day_available)*100
+        else:
+            return None
+    def get_avg_kd(self):
+      
+        km_driven =  Log_Report.objects.filter(id = self.id).aggregate(Avg('km_driven'))['km_driven__avg']
+        
+       
+        if km_driven is not None:
+          
+            return km_driven
+        else:
+            return None
+
     def __str__(self):
         return self.tag_number
 

@@ -25,6 +25,8 @@ from itertools import chain
 from django import template
 import requests
 import pandas as pd
+from django.core import serializers
+from datetime import datetime
 
 
 
@@ -609,3 +611,4 @@ def download_gen_logsheet(request, id):
     response = HttpResponse(document.gen_log_sheet, content_type='application/docx')
     response['Content-Disposition'] = f'attachment; filename="{document.gen_log_sheet}"'
     return response
+

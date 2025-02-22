@@ -354,6 +354,29 @@ class FleetExpenseForm(forms.ModelForm):
                         (fleet.id, fleet.id) for fleet in Fleet.objects.filter(id=fleet)
                     ]
             self.fields['fleet'].widget.attrs['readonly'] = True
+            fleet = Fleet.objects.get(id=fleet)
+            if fleet.ownership == 'Mercy Corps':
+                       CHOICES3 =   (
+                        ('',''),
+                        ('Costs of consumables','Costs of consumables'),
+                        ('Fuel cost', 'Fuel cost'),
+            
+                        ('Cost of labour', 'Cost of labour'),
+                        ('Cost of Spares' , 'Cost of Spares'),
+                       
+                        ('Tax, Insurance, miscs', 'Tax, Insurance, miscs')
+                        )
+            else:
+                       CHOICES3 =   (
+                        ('',''),
+                        ('Costs of consumables','Costs of consumables'),
+                        ('Fuel cost', 'Fuel cost'),
+            
+                        ('Cost of labour', 'Cost of labour'),
+                        ('Cost of Spares' , 'Cost of Spares'),
+                        ('Rental fees','Rental fees'),
+                        ('Tax, Insurance, miscs', 'Tax, Insurance, miscs')
+                         )
             CHOICES1 =   (
             ('',''),
             ('January', 'January'),
@@ -381,16 +404,7 @@ class FleetExpenseForm(forms.ModelForm):
             (2025, 2025),
             
             )
-            CHOICES3 =   (
-            ('',''),
-            ('Costs of consumables','Costs of consumables'),
-            ('Fuel cost', 'Fuel cost'),
-            ('Rental fees, Tax, insurance, miscs','Rental fees, Tax, insurance, miscs'),
-            ('Cost of labour', 'Cost of labour'),
-            ('Cost of Spares' , 'Cost of Spares'),
-            ('Rental fees','Rental fees'),
-            ('Tax, Insurance, miscs', 'Tax, Insurance, miscs')
-            )
+       
             CHOICES4 =   (
             ('',''),
             ('Kg','Kg'),
