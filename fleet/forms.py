@@ -4,7 +4,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 import pandas as pd
-
+from django.shortcuts import get_object_or_404
 class FleetForm(forms.ModelForm):
       def __init__(self, *args, **kwargs):
            super(FleetForm, self).__init__(*args, **kwargs)
@@ -354,20 +354,9 @@ class FleetExpenseForm(forms.ModelForm):
                         (fleet.id, fleet.id) for fleet in Fleet.objects.filter(id=fleet)
                     ]
             self.fields['fleet'].widget.attrs['readonly'] = True
-            fleet = Fleet.objects.get(id=fleet)
-            if fleet.ownership == 'Mercy Corps':
-                       CHOICES3 =   (
-                        ('',''),
-                        ('Costs of consumables','Costs of consumables'),
-                        ('Fuel cost', 'Fuel cost'),
-            
-                        ('Cost of labour', 'Cost of labour'),
-                        ('Cost of Spares' , 'Cost of Spares'),
-                       
-                        ('Tax, Insurance, miscs', 'Tax, Insurance, miscs')
-                        )
-            else:
-                       CHOICES3 =   (
+         
+          
+            CHOICES3 =   (
                         ('',''),
                         ('Costs of consumables','Costs of consumables'),
                         ('Fuel cost', 'Fuel cost'),
@@ -417,14 +406,11 @@ class FleetExpenseForm(forms.ModelForm):
             
             )
 
-
-
-
-
             self.fields['month_expense'].widget = forms.widgets.Select(choices=CHOICES1)
             self.fields['year_expense'].widget = forms.widgets.Select(choices=CHOICES2)
             self.fields['expense_type'].widget = forms.widgets.Select(choices=CHOICES3)
             self.fields['volume_unit'].widget = forms.widgets.Select(choices=CHOICES4)
+            self.fields['fleet'].required = True 
             self.fields['month_expense'].required = True 
             self.fields['year_expense'].required = True 
             self.fields['expense_type'].required = True 
@@ -448,12 +434,11 @@ class FleetExpenseForm(forms.ModelForm):
            
           
             if (start_date > datetime.today()):
-                 self._errors['month_expense'] = self.error_class(['Not valid date'])
+                  self._errors['month_expense'] = self.error_class(['Not valid date'])
 
             elif Fleet_Expense.objects.filter(fleet=fleet, month_expense=month, year_expense=year, expense_type=expense_type).exists():
-                 self._errors['month_expense'] = self.error_class(['Expense Already Exists'])
+                  self._errors['month_expense'] = self.error_class(['Expense Already Exists'])
            
-        
             return cleaned_data
       
 

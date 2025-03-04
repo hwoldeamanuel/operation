@@ -382,7 +382,6 @@ def add_fleet_expense(request, id):
     if request.method == "POST":
         form = FleetExpenseForm(request.POST, request.FILES)
         if form.is_valid():
-            
             instance =form.save(commit=False)
             instance.tag_number = fleet.tag_number
             instance.field_office = fleet.field_office
@@ -393,7 +392,7 @@ def add_fleet_expense(request, id):
                 headers={
                     'HX-Trigger': json.dumps({
                         "FleetExpenseChanged": None,
-                         "showMessage": f"{instance.tag_number} updated."
+                         "showMessage": f"{instance.id} updated."
 
                         
                     })
@@ -401,7 +400,7 @@ def add_fleet_expense(request, id):
             )
         form = FleetExpenseForm(request.POST,request.FILES, fleet=fleet.id)   
        
-        context = {'form':form}
+        context = {'fleet': fleet, 'form':form }
         return render(request, 'fleet/partial/fleetexpense_form.html', context)
     
     form = FleetExpenseForm(fleet = fleet.id)
